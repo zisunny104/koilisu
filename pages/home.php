@@ -1,0 +1,68 @@
+<?php
+$page_title = '首頁';
+$apps = getAvailableApps();
+?>
+
+<div class="ts-space is-large"></div>
+
+<!-- 歡迎區塊 -->
+<div class="ts-box is-rounded">
+    <div class="ts-content is-padded">
+        <div class="ts-header is-large is-heavy">歡迎使用 KoiLiSu 開利手</div>
+        <div class="ts-space"></div>
+        <div class="ts-text is-large">
+            一個關於實用小工具的開放專案，讓日常操作更加順手。<br>
+            每個工具都是獨立的小應用，可以單獨維護和使用。
+        </div>
+    </div>
+</div>
+
+<div class="ts-divider is-section"></div>
+
+<!-- 工具列表 -->
+<div class="ts-header is-large">可用工具</div>
+<div class="ts-space"></div>
+
+<?php if (empty($apps)): ?>
+<div class="ts-box is-rounded">
+    <div class="ts-content is-padded">
+        <div class="ts-text is-center-aligned">
+            <div class="ts-icon is-large is-faded">📦</div>
+            <div class="ts-header">尚無可用工具</div>
+            <div class="ts-text">工具正在開發中，敬請期待！</div>
+        </div>
+    </div>
+</div>
+<?php else: ?>
+<div class="ts-grid is-3-columns tablet:is-2-columns mobile:is-1-column">
+    <?php foreach ($apps as $app_key => $app_config): ?>
+    <div class="column">
+        <div class="ts-box is-rounded app-card" data-url="/koilisu/<?= htmlspecialchars($app_key) ?>">
+            <div class="ts-content is-padded">
+                <div class="ts-header"><?= htmlspecialchars($app_config['name']) ?></div>
+                <div class="ts-space is-small"></div>
+                <div class="ts-text"><?= htmlspecialchars($app_config['description']) ?></div>
+                <div class="ts-space"></div>
+                <div class="ts-text is-description">
+                    版本: <?= htmlspecialchars($app_config['version']) ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
+
+<div class="ts-divider is-section"></div>
+
+<!-- 架構說明 -->
+<div class="ts-box is-rounded">
+    <div class="ts-content is-padded">
+        <div class="ts-header">架構說明(這是Copilot 使用 Claude 4 寫的，我還沒有檢查QQ)</div>
+        <div class="ts-space"></div>
+        <div class="ts-text">
+            想了解 KoiLiSu 的架構設計和使用方式嗎？
+            <a href="/koilisu/docs" class="ts-text is-link">查看完整說明文件</a>
+        </div>
+    </div>
+</div>
