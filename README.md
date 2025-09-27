@@ -16,17 +16,40 @@ KoiLiSu（開利手）是一個現代化的 PHP 微框架，專為建立簡單�
 
 ## 快速開始
 
-### 安裝
+### 完整安裝（包含所有官方應用）
 
-1. 克隆倉庫：
+1. 克隆倉庫並初始化子模組：
+```bash
+git clone --recurse-submodules https://github.com/zisunny104/koilisu-framework.git
+cd koilisu-framework
+```
+
+或者先克隆後初始化子模組：
 ```bash
 git clone https://github.com/zisunny104/koilisu-framework.git
 cd koilisu-framework
+git submodule init
+git submodule update
 ```
 
 2. 配置網頁伺服器指向專案根目錄
 
 3. 訪問 `/koilisu/` 查看框架首頁
+
+### 僅安裝框架
+
+如果只需要框架本身：
+```bash
+git clone https://github.com/zisunny104/koilisu-framework.git
+cd koilisu-framework
+```
+
+### 更新子模組
+
+更新所有子模組到最新版本：
+```bash
+git submodule update --remote
+```
 
 ### 建立新應用
 
@@ -39,7 +62,7 @@ cd koilisu-framework
 ## 架構
 
 ```
-koilisu/
+koilisu-framework/
 ├── common/           # 共用功能
 │   ├── functions.php # 核心函數
 │   ├── header.php    # 頁面標頭
@@ -49,15 +72,28 @@ koilisu/
 │   └── docs.php      # 文件頁面
 ├── templates/        # 應用範本
 │   └── app-template/ # 標準範本
-├── apps/             # 應用目錄
+├── apps/             # 應用目錄（Git 子模組）
+│   ├── gradcheck/    # → koilisu-gradcheck
+│   ├── kobeu/        # → koilisu-kobeu
+│   └── fburl/        # → koilisu-fburl
+├── .gitmodules       # 子模組配置
 └── index.php         # 主入口
 ```
 
-## 官方應用
+## 官方應用（Git 子模組）
 
-- [koilisu-gradcheck](https://github.com/zisunny104/koilisu-gradcheck) - 畢業資格審查表下載工具
-- [koilisu-kobeu](https://github.com/zisunny104/koilisu-kobeu) - KoBeu 課表下載器
-- [koilisu-fburl](https://github.com/zisunny104/koilisu-fburl) - FB URL 跳轉工具
+KoiLiSu 框架使用 Git 子模組來管理官方應用，每個應用都有獨立的儲存庫：
+
+- **[koilisu-gradcheck](https://github.com/zisunny104/koilisu-gradcheck) v1.0.0** - 畢業資格審查表下載工具
+- **[koilisu-kobeu](https://github.com/zisunny104/koilisu-kobeu) v1.7.1** - KoBeu 課表下載器  
+- **[koilisu-fburl](https://github.com/zisunny104/koilisu-fburl) v1.0.0** - FB URL 跳轉工具
+
+### 子模組優勢
+
+- 🔄 **獨立開發**：每個應用可獨立版本控制
+- 📌 **版本鎖定**：框架可鎖定特定版本的應用
+- 🚀 **靈活部署**：可選擇安裝全部或部分應用
+- 📊 **清晰依賴**：GitHub 自動顯示子模組連結
 
 ## 開發指南
 
