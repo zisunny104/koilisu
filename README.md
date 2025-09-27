@@ -8,11 +8,11 @@ KoiLiSu（開利手）是一個現代化的 PHP 微框架，專為建立簡單�
 
 ## 特色
 
-✅ **現代化 UI**：基於 Tocas UI 5.0.3  
-✅ **響應式設計**：支援各種螢幕尺寸  
-✅ **深淺色主題**：內建主題切換功能  
-✅ **模組化架構**：輕鬆新增工具應用  
-✅ **應用範本**：快速建立新工具  
+✅ **現代化 UI**：基於 Tocas UI 5.0.3
+✅ **響應式設計**：支援各種螢幕尺寸
+✅ **深淺色主題**：內建主題切換功能
+✅ **模組化架構**：輕鬆新增工具應用
+✅ **應用範本**：快速建立新工具
 
 ## 快速開始
 
@@ -56,7 +56,7 @@ koilisu/
 ## 官方應用
 
 - [koilisu-gradcheck](https://github.com/zisunny104/koilisu-gradcheck) - 畢業資格審查表下載工具
-- [koilisu-kobeu](https://github.com/zisunny104/koilisu-kobeu) - 課表下載器
+- [koilisu-kobeu](https://github.com/zisunny104/koilisu-kobeu) - KoBeu 課表下載器
 - [koilisu-fburl](https://github.com/zisunny104/koilisu-fburl) - FB URL 跳轉工具
 
 ## 開發指南
