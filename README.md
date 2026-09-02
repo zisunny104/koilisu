@@ -49,7 +49,7 @@ git submodule update --remote
 
 2. 配置網頁伺服器指向專案根目錄
 
-3. 訪問 `/koilisu/` 查看框架首頁
+3. 訪問 `https://toka.dev/koilisu/` 查看框架首頁
 
 ### 建立新應用
 

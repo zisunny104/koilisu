@@ -33,10 +33,10 @@ koilisu/
 
 ### 路由規則
 
-- `/koilisu/` - 首頁，顯示所有可用工具
-- `/koilisu/docs` - 架構說明文件
-- `/koilisu/{app_name}` - 載入指定的應用程式
-- `/koilisu/{app_name}/{action}` - 執行應用程式的特定動作
+- `https://toka.dev/koilisu/` - 首頁，顯示所有可用工具
+- `https://toka.dev/koilisu/docs` - 架構說明文件
+- `https://toka.dev/koilisu/{app_name}` - 載入指定的應用程式
+- `https://toka.dev/koilisu/{app_name}/{action}` - 執行應用程式的特定動作
 
 ### 新增工具的步驟
 
