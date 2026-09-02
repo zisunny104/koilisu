@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-tw" id="html" class="is-rounded">
+<html lang="zh-tw" id="html">
 
 <head>
     <meta charset="UTF-8">
@@ -72,7 +72,7 @@
     </style>
 </head>
 
-<body>
+<body class="is-rounded">
     <div class="main-content">
         <?php if (!isset($hide_header) || !$hide_header): ?>
         <!-- 導航欄 -->

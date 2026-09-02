@@ -7,6 +7,7 @@
 ## 架構設計
 
 ### 目錄結構
+
 ```
 koilisu/
 ├── index.php              # 主要路由入口
@@ -19,11 +20,14 @@ koilisu/
 │   └── docs.php           # 文件頁
 ├── docs/                   # 說明文件
 │   └── README.md          # 架構說明
-└── apps/                   # 應用程式目錄
-    ├── fburl/             # FB 網址跳轉工具
+└── apps/                   # 應用程式目錄（Git 子模組）
+    ├── gradcheck/         # 畢業資格審查表下載工具
+    ├── kobeu/             # 課表下載器
+    ├── pitrace/           # 掃描去背輸出工具
+    ├── hapbun/            # PDF 合併排版工具
     │   ├── index.php      # 應用入口
     │   ├── config.php     # 應用設定
-    │   └── handler.php    # 處理邏輯
+    │   └── view.php       # 主視圖
     └── [其他工具]/
 ```
 
@@ -37,11 +41,13 @@ koilisu/
 ### 新增工具的步驟
 
 1. **建立應用目錄**
+
    ```
    mkdir apps/your_tool_name
    ```
 
-2. **創建設定檔** (`apps/your_tool_name/config.php`)
+2. **建立設定檔** (`apps/your_tool_name/config.php`)
+
    ```php
    <?php
    return [
@@ -52,7 +58,8 @@ koilisu/
    ];
    ```
 
-3. **創建應用入口** (`apps/your_tool_name/index.php`)
+3. **建立應用入口** (`apps/your_tool_name/index.php`)
+
    ```php
    <?php
    // 載入應用設定
@@ -108,4 +115,4 @@ koilisu/
 
 ---
 
-*最後更新: 2025年8月*
+_最後更新: 2025 年 8 月_

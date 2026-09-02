@@ -16,7 +16,7 @@ KoiLiSu（開利手）是一個現代化的 PHP 微框架，專為建立簡單�
 
 ## 快速開始
 
-### 完整安裝（包含所有官方應用）
+### 完整安裝(包含所有官方應用)
 
 1. 克隆倉庫並初始化子模組：
 ```bash
@@ -31,10 +31,6 @@ cd koilisu-framework
 git submodule init
 git submodule update
 ```
-
-2. 配置網頁伺服器指向專案根目錄
-
-3. 訪問 `/koilisu/` 查看框架首頁
 
 ### 僅安裝框架
 
@@ -51,6 +47,10 @@ cd koilisu-framework
 git submodule update --remote
 ```
 
+2. 配置網頁伺服器指向專案根目錄
+
+3. 訪問 `/koilisu/` 查看框架首頁
+
 ### 建立新應用
 
 使用內建的應用範本：
@@ -62,7 +62,7 @@ git submodule update --remote
 ## 架構
 
 ```
-koilisu-framework/
+koilisu/
 ├── common/           # 共用功能
 │   ├── functions.php # 核心函數
 │   ├── header.php    # 頁面標頭
@@ -73,9 +73,10 @@ koilisu-framework/
 ├── templates/        # 應用範本
 │   └── app-template/ # 標準範本
 ├── apps/             # 應用目錄（Git 子模組）
-│   ├── gradcheck/    # → koilisu-gradcheck
-│   ├── kobeu/        # → koilisu-kobeu
-│   └── fburl/        # → koilisu-fburl
+│   ├── gradcheck/    # → gradcheck
+│   ├── kobeu/        # → kobeu
+│   ├── pitrace/      # → pitrace
+│   └── hapbun/       # → hapbun
 ├── .gitmodules       # 子模組配置
 └── index.php         # 主入口
 ```
@@ -84,9 +85,10 @@ koilisu-framework/
 
 KoiLiSu 框架使用 Git 子模組來管理官方應用，每個應用都有獨立的儲存庫：
 
-- **[koilisu-gradcheck](https://github.com/zisunny104/koilisu-gradcheck) v1.0.0** - 畢業資格審查表下載工具
-- **[koilisu-kobeu](https://github.com/zisunny104/koilisu-kobeu) v1.7.1** - KoBeu 課表下載器  
-- **[koilisu-fburl](https://github.com/zisunny104/koilisu-fburl) v1.0.0** - FB URL 跳轉工具
+- [gradcheck](https://github.com/zisunny104/gradcheck) - 畢業資格審查表下載工具
+- [kobeu](https://github.com/zisunny104/kobeu) - 課表下載器
+- [pitrace](https://github.com/zisunny104/pitrace) - 掃描手繪稿去背、校正、輸出透明 PNG
+- [hapbun](https://github.com/zisunny104/hapbun) - PDF 合併排版工具
 
 ### 子模組優勢
 

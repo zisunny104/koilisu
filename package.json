@@ -1,26 +1,26 @@
 {
-  "name": "koilisu-framework",
-  "version": "1.0.0",
-  "description": "讓工具使用起來更順手的開放框架",
-  "main": "index.php",
-  "author": "Tokas (Xiang-zi Xie)",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zisunny104/koilisu-framework.git"
-  },
-  "keywords": [
-    "php",
-    "framework",
-    "microframework",
-    "koilisu",
-    "tools",
-    "asia-university"
-  ],
-  "scripts": {
-    "create-app": "pwsh templates/create-app.ps1"
-  },
-  "dependencies": {
-    "tocas-ui": "^5.0.3"
-  }
+    "name": "koilisu-framework",
+    "version": "1.0.1",
+    "description": "讓工具使用起來更順手的開放框架",
+    "main": "index.php",
+    "author": "Tokas (Xiang-zi Xie)",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/zisunny104/koilisu-framework.git"
+    },
+    "keywords": [
+        "php",
+        "framework",
+        "microframework",
+        "koilisu",
+        "tools",
+        "asia-university"
+    ],
+    "scripts": {
+        "create-app": "pwsh templates/create-app.ps1"
+    },
+    "dependencies": {
+        "tocas-ui": "^5.0.3"
+    }
 }

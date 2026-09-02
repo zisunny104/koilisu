@@ -4,7 +4,7 @@ session_start();
 // 載入共用函數
 require_once __DIR__ . '/common/functions.php';
 
-// 獲取當前 URI，去除 "/koilisu/" 前綴
+// 取得目前 URI，去除 "/koilisu/" 前綴
 $request_uri = trim(str_replace('/koilisu/', '', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/');
 
 // 檢查是否有 app 參數

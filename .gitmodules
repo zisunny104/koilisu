@@ -1,9 +1,12 @@
 [submodule "apps/gradcheck"]
 	path = apps/gradcheck
-	url = https://github.com/zisunny104/koilisu-gradcheck.git
+	url = https://github.com/zisunny104/gradcheck.git
 [submodule "apps/kobeu"]
 	path = apps/kobeu
-	url = https://github.com/zisunny104/koilisu-kobeu.git
-[submodule "apps/fburl"]
-	path = apps/fburl
-	url = https://github.com/zisunny104/koilisu-fburl.git
+	url = https://github.com/zisunny104/kobeu.git
+[submodule "apps/pitrace"]
+	path = apps/pitrace
+	url = https://github.com/zisunny104/pitrace.git
+[submodule "apps/hapbun"]
+	path = apps/hapbun
+	url = https://github.com/zisunny104/hapbun.git
