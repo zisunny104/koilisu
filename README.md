@@ -4,29 +4,25 @@
 
 ## 介紹
 
-KoiLiSu（開利手）是我個人支持開放理念的 side project：用一個個小工具，讓生活中一些瑣碎但常做的事情更順手。目前收錄的工具多半是在亞洲大學生活中遇到實際需求而動手做的——下載課表、列印畢業資格審查表、去背掃描手稿、合併講義 PDF——共用同一套介面與路由，一個入口就能找到所有工具。
+KoiLiSu（開利手）是一個開放的小工具集合，將一些讓日常使用更加順手的工具集中於此。
 
-每個工具仍是獨立維運的 repo（以 Git 子模組串接），可以各自開發、測試、部署；KoiLiSu 則是把它們集合起來的共用外殼，也是持續成長的工具家族。
+## 使用
 
-## 特色
+KoiLiSu 提供各項工具的網頁入口，可直接使用：
 
-✅ **一站式入口**：多個校園工具集中管理，不用到處找連結
-✅ **獨立又一致**：每個工具可各自開發部署，介面與操作體驗保持一致
-✅ **模組化架構**：新增工具不需要修改核心程式
-✅ **深淺色主題**：內建主題切換功能
-✅ **響應式設計**：支援各種螢幕尺寸
+https://toka.dev/koilisu/
 
-## 快速開始
+## 本地部署
 
-### 完整安裝（包含所有子專案）
+Clone 專案並初始化子模組：
 
-1. Clone repo 並初始化子模組：
 ```bash
 git clone --recurse-submodules https://github.com/zisunny104/koilisu.git
 cd koilisu
 ```
 
-或者先 clone 後初始化子模組：
+或先 Clone 後再初始化：
+
 ```bash
 git clone https://github.com/zisunny104/koilisu.git
 cd koilisu
@@ -34,94 +30,53 @@ git submodule init
 git submodule update
 ```
 
-### 僅安裝主站本身
+更新子模組：
 
-如果只需要主站骨架，不含各工具：
-```bash
-git clone https://github.com/zisunny104/koilisu.git
-cd koilisu
-```
-
-### 更新子模組
-
-更新所有子模組到最新版本：
 ```bash
 git submodule update --remote
 ```
 
-2. 配置網頁伺服器指向專案根目錄
+將網頁伺服器指向專案根目錄即可。
 
-3. 透過 `https://toka.dev/koilisu/` 造訪首頁
+## 專案結構
 
-### 建立新應用
-
-使用內建的應用範本：
-
-```powershell
-.\templates\create-app.ps1 -AppName "myapp" -DisplayName "我的工具" -Description "工具描述"
-```
-
-## 架構
-
-```
+```text
 koilisu/
 ├── common/           # 共用功能
-│   ├── functions.php # 核心函數
-│   ├── header.php    # 頁面標頭
-│   └── footer.php    # 頁面底部
+│   ├── functions.php
+│   ├── header.php
+│   └── footer.php
 ├── pages/            # 靜態頁面
-│   ├── home.php      # 首頁
-│   └── docs.php      # 文件頁面
-├── templates/        # 應用範本
-│   └── app-template/ # 標準範本
-├── apps/             # 各工具子專案（以 Git 子模組串接）
-│   ├── gradcheck/    # → gradcheck
-│   ├── kobeu/        # → kobeu
-│   ├── pitrace/      # → pitrace
-│   └── hapbun/       # → hapbun
+│   ├── home.php
+│   └── docs.php
+├── templates/        # 工具範本
+│   └── app-template/
+├── apps/             # 各工具子專案
 ├── .gitmodules       # 子模組配置
 └── index.php         # 主入口
 ```
 
-## 子專案
+各工具以獨立 repository 維護，並透過 Git submodule 與 KoiLiSu 串接。
 
-每個子專案都有獨立的 repo，透過 Git 子模組串接管理：
+## 專案命名
 
-- [gradcheck](https://github.com/zisunny104/gradcheck) - 畢業資格審查表下載工具
-- [kobeu](https://github.com/zisunny104/kobeu) - 課表下載器
-- [pitrace](https://github.com/zisunny104/pitrace) - 掃描手繪稿去背、校正、輸出透明 PNG
-- [hapbun](https://github.com/zisunny104/hapbun) - PDF 合併排版工具
+「開利手」取名自「開放」與「順手」的概念，希望工具能夠開放使用，也讓日常使用更加順手。
 
-### 子專案的好處
+名稱中的「開」、「利」、「手」三字，取自客語四縣腔的讀音，並以其讀音組成 **KoiLiSu**。
 
-- 🔄 **獨立開發**：每個子專案可獨立版本控制
-- 📌 **版本鎖定**：主站可鎖定特定版本的子專案
-- 🚀 **靈活部署**：可選擇安裝全部或部分子專案
-- 📊 **清晰依賴**：GitHub 自動顯示子模組連結
+四縣腔客語拼音：
 
-## 開發指南
+**koiˊ · liˊ · suˋ**
 
-### 應用結構
+## 回報問題
 
-每個應用包含：
-- `config.php` - 應用設定
-- `index.php` - 主入口
-- `view.php` - 主視圖
-
-### 範本變數
-
-- `{APP_NAME}` - 應用名稱
-- `{APP_DISPLAY_NAME}` - 顯示標題
-- `{APP_DESCRIPTION}` - 應用描述
-- `{ICON_NAME}` - 主要圖標
-
-## 貢獻
-
-歡迎提交 Pull Request 或建立 Issue！
+如果使用上遇到問題，可以提出 Issue。
 
 ## 授權
 
-MIT License，詳見 [LICENSE](LICENSE)。各子專案（apps/ 目錄下）為獨立 repo，各自附有自己的 LICENSE。
+本專案採用 MIT License，詳見 [LICENSE](LICENSE)。
+
+`apps/` 下的各子專案為獨立 repository，授權方式依各專案的 LICENSE 為準。
 
 ## 作者
 
