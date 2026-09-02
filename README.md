@@ -74,7 +74,7 @@ koilisu/
 │   └── docs.php      # 文件頁面
 ├── templates/        # 應用範本
 │   └── app-template/ # 標準範本
-├── apps/             # 應用目錄（Git 子模組）
+├── apps/             # 各工具子專案（以 Git 子模組串接）
 │   ├── gradcheck/    # → gradcheck
 │   ├── kobeu/        # → kobeu
 │   ├── pitrace/      # → pitrace
@@ -83,20 +83,20 @@ koilisu/
 └── index.php         # 主入口
 ```
 
-## 官方應用（Git 子模組）
+## 官方子專案
 
-KoiLiSu 使用 Git 子模組來管理官方應用，每個應用都有獨立的儲存庫：
+每個官方子專案都有獨立的儲存庫，透過 Git 子模組串接管理：
 
 - [gradcheck](https://github.com/zisunny104/gradcheck) - 畢業資格審查表下載工具
 - [kobeu](https://github.com/zisunny104/kobeu) - 課表下載器
 - [pitrace](https://github.com/zisunny104/pitrace) - 掃描手繪稿去背、校正、輸出透明 PNG
 - [hapbun](https://github.com/zisunny104/hapbun) - PDF 合併排版工具
 
-### 子模組優勢
+### 子專案的好處
 
-- 🔄 **獨立開發**：每個應用可獨立版本控制
-- 📌 **版本鎖定**：主站可鎖定特定版本的應用
-- 🚀 **靈活部署**：可選擇安裝全部或部分應用
+- 🔄 **獨立開發**：每個子專案可獨立版本控制
+- 📌 **版本鎖定**：主站可鎖定特定版本的子專案
+- 🚀 **靈活部署**：可選擇安裝全部或部分子專案
 - 📊 **清晰依賴**：GitHub 自動顯示子模組連結
 
 ## 開發指南
@@ -121,7 +121,7 @@ KoiLiSu 使用 Git 子模組來管理官方應用，每個應用都有獨立的�
 
 ## 授權
 
-MIT License，詳見 [LICENSE](LICENSE)。各應用子模組（apps/ 目錄下）為獨立儲存庫，各自附有自己的 LICENSE。
+MIT License，詳見 [LICENSE](LICENSE)。各子專案（apps/ 目錄下）為獨立儲存庫，各自附有自己的 LICENSE。
 
 ## 作者
 
