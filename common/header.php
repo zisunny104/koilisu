@@ -34,6 +34,9 @@
     }
 
     .app-card {
+        display: block;
+        color: inherit;
+        text-decoration: none;
         transition: all 0.3s ease;
         cursor: pointer;
     }
@@ -69,10 +72,40 @@
     .ts-divider {
         margin: 1.5rem 0;
     }
+
+    /* 無障礙：跳至主要內容 */
+    .skip-link {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        z-index: 1000;
+        padding: 0.5em 1em;
+        background: #1b1b1d;
+        color: white;
+        text-decoration: none;
+        border-radius: 0 0 6px 0;
+    }
+
+    .skip-link:focus {
+        left: 0;
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
     </style>
 </head>
 
 <body class="is-rounded">
+    <a href="#main-content" class="skip-link">跳至主要內容</a>
     <div class="main-content">
         <?php if (!isset($hide_header) || !$hide_header): ?>
         <!-- 導航欄 -->
@@ -88,12 +121,14 @@
                         <div class="ts-text is-description">順手好用的開放工具集</div>
                     </div>
                     <div class="column">
-                        <div class="ts-tab is-secondary is-inverted">
-                            <a class="item <?= (($_SERVER['REQUEST_URI'] ?? '') === '/koilisu/' || ($_SERVER['REQUEST_URI'] ?? '') === '/koilisu/index') ? 'is-active' : '' ?>"
-                                href="/koilisu/">首頁</a>
-                            <a class="item <?= (strpos($_SERVER['REQUEST_URI'] ?? '', '/koilisu/docs') === 0) ? 'is-active' : '' ?>"
-                                href="/koilisu/docs">文件</a>
-                        </div>
+                        <nav class="ts-tab is-secondary is-inverted" aria-label="主要導覽">
+                            <?php $is_home = (($_SERVER['REQUEST_URI'] ?? '') === '/koilisu/' || ($_SERVER['REQUEST_URI'] ?? '') === '/koilisu/index'); ?>
+                            <a class="item <?= $is_home ? 'is-active' : '' ?>" href="/koilisu/"
+                                <?= $is_home ? 'aria-current="page"' : '' ?>>首頁</a>
+                            <?php $is_docs = (strpos($_SERVER['REQUEST_URI'] ?? '', '/koilisu/docs') === 0); ?>
+                            <a class="item <?= $is_docs ? 'is-active' : '' ?>" href="/koilisu/docs"
+                                <?= $is_docs ? 'aria-current="page"' : '' ?>>文件</a>
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -101,5 +136,5 @@
         <?php endif; ?>
 
         <!-- 主要內容區 -->
-        <div class="ts-content is-padded" style="flex: 1;">
+        <main id="main-content" class="ts-content is-padded" style="flex: 1;">
             <div class="ts-container"><?php

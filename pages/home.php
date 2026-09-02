@@ -37,7 +37,7 @@ $apps = getAvailableApps();
 <div class="ts-grid mobile:is-1-columns tablet:is-2-columns desktop+:is-3-columns">
     <?php foreach ($apps as $app_key => $app_config): ?>
     <div class="column">
-        <div class="ts-box is-rounded app-card" data-url="/koilisu/<?= htmlspecialchars($app_key) ?>">
+        <a href="/koilisu/<?= htmlspecialchars($app_key) ?>" class="ts-box is-rounded app-card">
             <div class="ts-content is-padded">
                 <div class="ts-header"><?= htmlspecialchars($app_config['name']) ?></div>
                 <div class="ts-space is-small"></div>
@@ -47,7 +47,7 @@ $apps = getAvailableApps();
                     版本: <?= htmlspecialchars($app_config['version']) ?>
                 </div>
             </div>
-        </div>
+        </a>
     </div>
     <?php endforeach; ?>
 </div>
