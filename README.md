@@ -121,7 +121,7 @@ KoiLiSu 使用 Git 子模組來管理官方應用，每個應用都有獨立的�
 
 ## 授權
 
-MIT License
+MIT License，詳見 [LICENSE](LICENSE)。各應用子模組（apps/ 目錄下）為獨立儲存庫，各自附有自己的 LICENSE。
 
 ## 作者
 
