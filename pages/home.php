@@ -34,7 +34,7 @@ $apps = getAvailableApps();
     </div>
 </div>
 <?php else: ?>
-<div class="ts-grid is-3-columns tablet:is-2-columns mobile:is-1-column">
+<div class="ts-grid mobile:is-1-columns tablet:is-2-columns desktop+:is-3-columns">
     <?php foreach ($apps as $app_key => $app_config): ?>
     <div class="column">
         <div class="ts-box is-rounded app-card" data-url="/koilisu/<?= htmlspecialchars($app_key) ?>">
@@ -58,7 +58,7 @@ $apps = getAvailableApps();
 <!-- 架構說明 -->
 <div class="ts-box is-rounded">
     <div class="ts-content is-padded">
-        <div class="ts-header">架構說明(這是Copilot 使用 Claude 4 寫的，我還沒有檢查QQ)</div>
+        <div class="ts-header">架構說明</div>
         <div class="ts-space"></div>
         <div class="ts-text">
             想了解 KoiLiSu 的架構設計和使用方式嗎？
