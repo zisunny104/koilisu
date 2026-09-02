@@ -1,20 +1,18 @@
 {
-    "name": "koilisu-framework",
+    "name": "koilisu",
     "version": "1.0.1",
-    "description": "讓工具使用起來更順手的開放框架",
+    "description": "用小工具讓生活更方便的開放專案",
     "main": "index.php",
     "author": "Tokas (Xiang-zi Xie)",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/zisunny104/koilisu-framework.git"
+        "url": "https://github.com/zisunny104/koilisu.git"
     },
     "keywords": [
         "php",
-        "framework",
-        "microframework",
         "koilisu",
-        "tools",
+        "student-tools",
         "asia-university"
     ],
     "scripts": {

@@ -1,43 +1,45 @@
-# KoiLiSu Framework
+# KoiLiSu 開利手
 
-> 讓工具使用起來更順手的開放框架
+> 用小工具讓生活更方便的開放專案
 
 ## 介紹
 
-KoiLiSu（開利手）是一個現代化的 PHP 微框架，專為建立簡單實用的小工具而設計。
+KoiLiSu（開利手）是我個人支持開放理念的 side project：用一個個小工具，讓生活中一些瑣碎但常做的事情更順手。目前收錄的工具多半是在亞洲大學生活中遇到實際需求而動手做的——下載課表、列印畢業資格審查表、去背掃描手稿、合併講義 PDF——共用同一套介面與路由，一個入口就能找到所有工具。
+
+每個工具仍是獨立維運的儲存庫（以 Git 子模組串接），可以各自開發、測試、部署；KoiLiSu 則是把它們集合起來的共用外殼，也是持續成長的工具家族。
 
 ## 特色
 
-✅ **現代化 UI**：基於 Tocas UI 5.0.3
-✅ **響應式設計**：支援各種螢幕尺寸
+✅ **一站式入口**：多個校園工具集中管理，不用到處找連結
+✅ **獨立又一致**：每個工具可各自開發部署，介面與操作體驗保持一致
+✅ **模組化架構**：新增工具不需要修改核心程式
 ✅ **深淺色主題**：內建主題切換功能
-✅ **模組化架構**：輕鬆新增工具應用
-✅ **應用範本**：快速建立新工具
+✅ **響應式設計**：支援各種螢幕尺寸
 
 ## 快速開始
 
-### 完整安裝(包含所有官方應用)
+### 完整安裝（包含所有官方應用）
 
 1. 克隆倉庫並初始化子模組：
 ```bash
-git clone --recurse-submodules https://github.com/zisunny104/koilisu-framework.git
-cd koilisu-framework
+git clone --recurse-submodules https://github.com/zisunny104/koilisu.git
+cd koilisu
 ```
 
 或者先克隆後初始化子模組：
 ```bash
-git clone https://github.com/zisunny104/koilisu-framework.git
-cd koilisu-framework
+git clone https://github.com/zisunny104/koilisu.git
+cd koilisu
 git submodule init
 git submodule update
 ```
 
-### 僅安裝框架
+### 僅安裝主站本身
 
-如果只需要框架本身：
+如果只需要主站骨架，不含各工具：
 ```bash
-git clone https://github.com/zisunny104/koilisu-framework.git
-cd koilisu-framework
+git clone https://github.com/zisunny104/koilisu.git
+cd koilisu
 ```
 
 ### 更新子模組
@@ -49,7 +51,7 @@ git submodule update --remote
 
 2. 配置網頁伺服器指向專案根目錄
 
-3. 訪問 `https://toka.dev/koilisu/` 查看框架首頁
+3. 透過 `https://toka.dev/koilisu/` 造訪首頁
 
 ### 建立新應用
 
@@ -83,7 +85,7 @@ koilisu/
 
 ## 官方應用（Git 子模組）
 
-KoiLiSu 框架使用 Git 子模組來管理官方應用，每個應用都有獨立的儲存庫：
+KoiLiSu 使用 Git 子模組來管理官方應用，每個應用都有獨立的儲存庫：
 
 - [gradcheck](https://github.com/zisunny104/gradcheck) - 畢業資格審查表下載工具
 - [kobeu](https://github.com/zisunny104/kobeu) - 課表下載器
@@ -93,7 +95,7 @@ KoiLiSu 框架使用 Git 子模組來管理官方應用，每個應用都有獨�
 ### 子模組優勢
 
 - 🔄 **獨立開發**：每個應用可獨立版本控制
-- 📌 **版本鎖定**：框架可鎖定特定版本的應用
+- 📌 **版本鎖定**：主站可鎖定特定版本的應用
 - 🚀 **靈活部署**：可選擇安裝全部或部分應用
 - 📊 **清晰依賴**：GitHub 自動顯示子模組連結
 
