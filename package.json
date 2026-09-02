@@ -1,7 +1,7 @@
 {
     "name": "koilisu",
     "version": "1.0.1",
-    "description": "用小工具讓生活更方便的開放專案",
+    "description": "讓生活中的小事更順手的開放專案",
     "main": "index.php",
     "author": "Tokas (Xiang-zi Xie)",
     "license": "MIT",
