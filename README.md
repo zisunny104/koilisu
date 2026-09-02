@@ -18,7 +18,7 @@ KoiLiSu（開利手）是我個人支持開放理念的 side project：用一個
 
 ## 快速開始
 
-### 完整安裝（包含所有官方應用）
+### 完整安裝（包含所有子專案）
 
 1. 克隆倉庫並初始化子模組：
 ```bash
@@ -83,9 +83,9 @@ koilisu/
 └── index.php         # 主入口
 ```
 
-## 官方子專案
+## 子專案
 
-每個官方子專案都有獨立的儲存庫，透過 Git 子模組串接管理：
+每個子專案都有獨立的儲存庫，透過 Git 子模組串接管理：
 
 - [gradcheck](https://github.com/zisunny104/gradcheck) - 畢業資格審查表下載工具
 - [kobeu](https://github.com/zisunny104/kobeu) - 課表下載器
