@@ -6,7 +6,7 @@
 
 KoiLiSu（開利手）是我個人支持開放理念的 side project：用一個個小工具，讓生活中一些瑣碎但常做的事情更順手。目前收錄的工具多半是在亞洲大學生活中遇到實際需求而動手做的——下載課表、列印畢業資格審查表、去背掃描手稿、合併講義 PDF——共用同一套介面與路由，一個入口就能找到所有工具。
 
-每個工具仍是獨立維運的儲存庫（以 Git 子模組串接），可以各自開發、測試、部署；KoiLiSu 則是把它們集合起來的共用外殼，也是持續成長的工具家族。
+每個工具仍是獨立維運的 repo（以 Git 子模組串接），可以各自開發、測試、部署；KoiLiSu 則是把它們集合起來的共用外殼，也是持續成長的工具家族。
 
 ## 特色
 
@@ -20,13 +20,13 @@ KoiLiSu（開利手）是我個人支持開放理念的 side project：用一個
 
 ### 完整安裝（包含所有子專案）
 
-1. 克隆倉庫並初始化子模組：
+1. Clone repo 並初始化子模組：
 ```bash
 git clone --recurse-submodules https://github.com/zisunny104/koilisu.git
 cd koilisu
 ```
 
-或者先克隆後初始化子模組：
+或者先 clone 後初始化子模組：
 ```bash
 git clone https://github.com/zisunny104/koilisu.git
 cd koilisu
@@ -85,7 +85,7 @@ koilisu/
 
 ## 子專案
 
-每個子專案都有獨立的儲存庫，透過 Git 子模組串接管理：
+每個子專案都有獨立的 repo，透過 Git 子模組串接管理：
 
 - [gradcheck](https://github.com/zisunny104/gradcheck) - 畢業資格審查表下載工具
 - [kobeu](https://github.com/zisunny104/kobeu) - 課表下載器
@@ -121,7 +121,7 @@ koilisu/
 
 ## 授權
 
-MIT License，詳見 [LICENSE](LICENSE)。各子專案（apps/ 目錄下）為獨立儲存庫，各自附有自己的 LICENSE。
+MIT License，詳見 [LICENSE](LICENSE)。各子專案（apps/ 目錄下）為獨立 repo，各自附有自己的 LICENSE。
 
 ## 作者
 
