@@ -46,6 +46,20 @@
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
+    .app-card.is-archived {
+        opacity: 0.7;
+    }
+
+    .app-card.is-archived:hover {
+        opacity: 1;
+    }
+
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4em;
+    }
+
     .markdown-content {
         line-height: 1.6;
     }

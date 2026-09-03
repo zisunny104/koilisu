@@ -85,7 +85,9 @@ return [
     'name' => '工具顯示名稱',
     'description' => '工具描述',
     'version' => '1.0.0',
-    'author' => '作者名稱'
+    'author' => '作者名稱',
+    'status' => 'archived', // 選填，預設視為 active；設為 archived 會歸類到首頁的「封存工具」區塊
+    'tags' => ['分類1', '分類2'] // 選填，顯示在工具卡片上的標籤
 ];
 ```
 
@@ -121,13 +123,14 @@ switch ($_APP['action']) {
 - **共用函數**：`common/functions.php`（`redirect()`、`loadPage()`、`loadApp()`、`renderMarkdown()`、`getAvailableApps()`）
 - **主殼頁面模板**：`common/header.php`、`common/footer.php`，僅套用於 `pages/` 下的頁面
 - **新增工具範本**：`templates/app-template/`、`templates/create-app.ps1`
+- **分類與封存**：`config.php` 的 `tags`（標籤陣列）與 `status`（`active` 或 `archived`）為選填欄位，由 `pages/home.php` 讀取後分別渲染成標籤 chip 與「封存工具」區塊，`getAvailableApps()` 本身不做任何處理
 
 ### 各子專案現況
 
-- **gradcheck**（GradCheck，v1.0.0）- 透過學號查詢亞洲大學學生畢業資格審查表；Tocas UI 5.7.0；MIT License
-- **kobeu**（KoBeo，v1.7.1）- 亞洲大學學生課表下載工具，需校內 VPN，提供 PDF / Excel 格式；Tocas UI 5.7.0；MIT License
-- **pitrace**（拾印，v0.1.1）- 手繪／掃描素材去背、校正、透明化並個別輸出的圖形化工具；Tocas UI 5.7.0；MIT License
-- **hapbun**（合本，v1.0.4）- PDF 合併排版工具，可設定多頁、封面、目錄、頁碼；Tocas UI 5.7.0；MIT License
+- **gradcheck**（GradCheck，v1.0.0）- 透過學號查詢亞洲大學學生畢業資格審查表；Tocas UI 5.7.0；標籤：學務、下載；已封存；MIT License
+- **kobeu**（KoBeo，v1.7.1）- 亞洲大學學生課表下載工具，需校內 VPN，提供 PDF / Excel 格式；Tocas UI 5.7.0；標籤：學務、下載、VPN；已封存；MIT License
+- **pitrace**（拾印，v0.1.1）- 手繪／掃描素材去背、校正、透明化並個別輸出的圖形化工具；Tocas UI 5.7.0；標籤：圖像、去背；MIT License
+- **hapbun**（合本，v1.0.4）- PDF 合併排版工具，可設定多頁、封面、目錄、頁碼；Tocas UI 5.7.0；標籤：PDF、排版；MIT License
 
 ### 與其他開發者協作
 

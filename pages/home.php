@@ -1,6 +1,45 @@
 <?php
 $page_title = '首頁';
 $apps = getAvailableApps();
+
+$active_apps = array_filter($apps, function ($config) {
+    return ($config['status'] ?? 'active') !== 'archived';
+});
+$archived_apps = array_filter($apps, function ($config) {
+    return ($config['status'] ?? 'active') === 'archived';
+});
+
+function renderAppCard($app_key, $app_config, $archived = false)
+{
+?>
+<div class="column">
+    <a href="/koilisu/<?= htmlspecialchars($app_key) ?>" class="ts-box is-rounded app-card<?= $archived ? ' is-archived' : '' ?>">
+        <div class="ts-content is-padded">
+            <div class="ts-header">
+                <?= htmlspecialchars($app_config['name']) ?>
+                <?php if ($archived): ?>
+                <span class="ts-badge is-secondary is-small">已封存</span>
+                <?php endif; ?>
+            </div>
+            <div class="ts-space is-small"></div>
+            <div class="ts-text"><?= htmlspecialchars($app_config['description']) ?></div>
+            <?php if (!empty($app_config['tags'])): ?>
+            <div class="ts-space is-small"></div>
+            <div class="tag-list">
+                <?php foreach ($app_config['tags'] as $tag): ?>
+                <span class="ts-chip is-small"><?= htmlspecialchars($tag) ?></span>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
+            <div class="ts-space"></div>
+            <div class="ts-text is-description">
+                版本: <?= htmlspecialchars($app_config['version']) ?>
+            </div>
+        </div>
+    </a>
+</div>
+<?php
+}
 ?>
 
 <div class="ts-space is-large"></div>
@@ -23,7 +62,7 @@ $apps = getAvailableApps();
 <div class="ts-header is-large">可用工具</div>
 <div class="ts-space"></div>
 
-<?php if (empty($apps)): ?>
+<?php if (empty($active_apps)): ?>
 <div class="ts-box is-rounded">
     <div class="ts-content is-padded">
         <div class="ts-text is-center-aligned">
@@ -35,20 +74,23 @@ $apps = getAvailableApps();
 </div>
 <?php else: ?>
 <div class="ts-grid mobile:is-1-columns tablet:is-2-columns desktop+:is-3-columns">
-    <?php foreach ($apps as $app_key => $app_config): ?>
-    <div class="column">
-        <a href="/koilisu/<?= htmlspecialchars($app_key) ?>" class="ts-box is-rounded app-card">
-            <div class="ts-content is-padded">
-                <div class="ts-header"><?= htmlspecialchars($app_config['name']) ?></div>
-                <div class="ts-space is-small"></div>
-                <div class="ts-text"><?= htmlspecialchars($app_config['description']) ?></div>
-                <div class="ts-space"></div>
-                <div class="ts-text is-description">
-                    版本: <?= htmlspecialchars($app_config['version']) ?>
-                </div>
-            </div>
-        </a>
-    </div>
+    <?php foreach ($active_apps as $app_key => $app_config): ?>
+    <?php renderAppCard($app_key, $app_config); ?>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
+
+<?php if (!empty($archived_apps)): ?>
+<div class="ts-divider is-section"></div>
+
+<!-- 封存工具 -->
+<div class="ts-header is-large">封存工具</div>
+<div class="ts-space is-small"></div>
+<div class="ts-text is-description">仍可正常使用，只是不再主推的舊工具。</div>
+<div class="ts-space"></div>
+<div class="ts-grid mobile:is-1-columns tablet:is-2-columns desktop+:is-3-columns">
+    <?php foreach ($archived_apps as $app_key => $app_config): ?>
+    <?php renderAppCard($app_key, $app_config, true); ?>
     <?php endforeach; ?>
 </div>
 <?php endif; ?>
