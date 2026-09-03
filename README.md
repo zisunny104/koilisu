@@ -12,7 +12,7 @@ KoiLiSu 提供各項工具的網頁入口，可直接使用：
 
 https://toka.dev/koilisu/
 
-## 本地部署
+## 本機部署
 
 Clone 專案並初始化子模組：
 
