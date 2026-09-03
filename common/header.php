@@ -64,6 +64,23 @@
         font-family: 'Courier New', monospace;
     }
 
+    .markdown-content pre {
+        background-color: #f4f4f4;
+        padding: 1em;
+        border-radius: 6px;
+        overflow-x: auto;
+    }
+
+    .markdown-content pre code {
+        background: none;
+        padding: 0;
+    }
+
+    .markdown-content ul,
+    .markdown-content ol {
+        padding-left: 1.5em;
+    }
+
     /* 段落間距改善 */
     .ts-space.is-section {
         margin: 2rem 0;
