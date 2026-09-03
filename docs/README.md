@@ -116,7 +116,7 @@ switch ($_APP['action']) {
 
 ### 共用資源
 
-- **UI 框架**：目前 4 個子專案都使用 Tocas UI —— gradcheck、kobeu、hapbun 為 5.0.3，pitrace 為 5.7.0（版本不一致，需要的話可自行更新對應子專案的 CDN 連結）。這是目前的實務慣例，路由層（`index.php` / `loadApp()`）本身不強制要求，子專案理論上可以選用其他前端方案，只要 `view.php` 能輸出完整的 HTML 頁面即可
+- **UI 框架**：目前 4 個子專案與主殼都統一使用 Tocas UI 5.7.0。這是目前的實務慣例，路由層（`index.php` / `loadApp()`）本身不強制要求，子專案理論上可以選用其他前端方案，只要 `view.php` 能輸出完整的 HTML 頁面即可
 - **字體**：Montserrat（Google Fonts，用於主殼標題）
 - **共用函數**：`common/functions.php`（`redirect()`、`loadPage()`、`loadApp()`、`renderMarkdown()`、`getAvailableApps()`）
 - **主殼頁面模板**：`common/header.php`、`common/footer.php`，僅套用於 `pages/` 下的頁面
@@ -124,10 +124,10 @@ switch ($_APP['action']) {
 
 ### 各子專案現況
 
-- **gradcheck**（GradCheck，v1.0.0）- 透過學號查詢亞洲大學學生畢業資格審查表；Tocas UI 5.0.3；MIT License
-- **kobeu**（KoBeo，v1.7.1）- 亞洲大學學生課表下載工具，需校內 VPN，提供 PDF / Excel 格式；Tocas UI 5.0.3；MIT License
+- **gradcheck**（GradCheck，v1.0.0）- 透過學號查詢亞洲大學學生畢業資格審查表；Tocas UI 5.7.0；MIT License
+- **kobeu**（KoBeo，v1.7.1）- 亞洲大學學生課表下載工具，需校內 VPN，提供 PDF / Excel 格式；Tocas UI 5.7.0；MIT License
 - **pitrace**（拾印，v0.1.1）- 手繪／掃描素材去背、校正、透明化並個別輸出的圖形化工具；Tocas UI 5.7.0；MIT License
-- **hapbun**（合本，v1.0.4）- PDF 合併排版工具，可設定多頁、封面、目錄、頁碼；Tocas UI 5.0.3；MIT License
+- **hapbun**（合本，v1.0.4）- PDF 合併排版工具，可設定多頁、封面、目錄、頁碼；Tocas UI 5.7.0；MIT License
 
 ### 與其他開發者協作
 

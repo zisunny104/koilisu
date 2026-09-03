@@ -19,6 +19,6 @@
         "create-app": "pwsh templates/create-app.ps1"
     },
     "dependencies": {
-        "tocas-ui": "^5.0.3"
+        "tocas-ui": "^5.7.0"
     }
 }
