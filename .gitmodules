@@ -10,3 +10,6 @@
 [submodule "apps/hapbun"]
 	path = apps/hapbun
 	url = https://github.com/zisunny104/hapbun.git
+[submodule "apps/printan"]
+	path = apps/printan
+	url = https://github.com/zisunny104/printan.git
