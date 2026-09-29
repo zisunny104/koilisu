@@ -17,8 +17,5 @@
     ],
     "scripts": {
         "create-app": "pwsh templates/create-app.ps1"
-    },
-    "dependencies": {
-        "tocas-ui": "^5.7.0"
     }
 }

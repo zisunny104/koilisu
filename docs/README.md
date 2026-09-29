@@ -12,7 +12,7 @@
 koilisu/
 ├── index.php              # 路由入口
 ├── common/                # 共用元件
-│   ├── functions.php      # 路由 / 頁面載入 / Markdown 轉換等共用函數
+│   ├── functions.php      # 路由 / 頁面載入 / Markdown 轉換等共用函式
 │   ├── header.php         # 主殼頁面 <head>、導覽列、共用樣式
 │   └── footer.php         # 主殼頁面頁尾、深淺色主題切換
 ├── pages/                 # 主殼頁面（套用 header/footer）
@@ -24,12 +24,13 @@ koilisu/
 │   ├── app-template/        # 子專案骨架（config.php / index.php / view.php）
 │   ├── create-app.ps1        # 建立新子專案的 PowerShell 腳本
 │   └── EXAMPLES.md
-├── apps/                     # 各工具子專案（Git 子模組，各自獨立 repo）
+├── apps/                     # 各工具子專案（Git submodule，各自獨立 repo）
 │   ├── gradcheck/
 │   ├── kobeu/
 │   ├── pitrace/
-│   └── hapbun/
-├── .gitmodules                # 子模組對應設定
+│   ├── hapbun/
+│   └── printan/
+├── .gitmodules                # submodule 對應設定
 ├── package.json                # 專案中繼資料（不依賴 Node 執行環境）
 └── LICENSE
 ```
@@ -45,7 +46,7 @@ apps/gradcheck/
 └── LICENSE
 ```
 
-個別子專案可能因需求多出額外檔案，例如 pitrace 有 `js/`，hapbun 有 `fonts/`、`install_font.php`，這些都不影響共用的路由慣例。
+個別子專案可能因需求多出額外檔案，例如 pitrace 有 `js/`，hapbun 有 `install_font.php`（字型快取 `fonts/` 不進版本控制），printan 有 `js/`、`partials/`、`vendor/`、`tests/` 與 `deploy.sh`，這些都不影響共用的路由慣例。
 
 ### 路由規則
 
@@ -72,7 +73,7 @@ pwsh templates/create-app.ps1 -AppName your_tool_name -DisplayName "工具顯示
 npm run create-app -- -AppName your_tool_name -DisplayName "工具顯示名稱" -Description "工具描述"
 ```
 
-完成後，依需求修改 `apps/your_tool_name/view.php`（範本內建了 `validateInput()`、`executeMainFunction()` 兩個預留函數，供實作參考）。
+完成後，依需求修改 `apps/your_tool_name/view.php`（範本內建了 `validateInput()`、`executeMainFunction()` 兩個預留函式，供實作參考）。
 
 **方法二：手動建立**
 
@@ -118,19 +119,20 @@ switch ($_APP['action']) {
 
 ### 共用資源
 
-- **UI 框架**：目前 4 個子專案與主殼都統一使用 Tocas UI 5.7.0。這是目前的實務慣例，路由層（`index.php` / `loadApp()`）本身不強制要求，子專案理論上可以選用其他前端方案，只要 `view.php` 能輸出完整的 HTML 頁面即可
+- **UI 框架**：目前 5 個子專案與主殼都統一使用 Tocas UI 5.7.0。這是目前的實務慣例，路由層（`index.php` / `loadApp()`）本身不強制要求，子專案理論上可以選用其他前端方案，只要 `view.php` 能輸出完整的 HTML 頁面即可
 - **字體**：Montserrat（Google Fonts，用於主殼標題）
-- **共用函數**：`common/functions.php`（`redirect()`、`loadPage()`、`loadApp()`、`renderMarkdown()`、`getAvailableApps()`）
+- **共用函式**：`common/functions.php`（`redirect()`、`loadPage()`、`loadApp()`、`renderMarkdown()`、`getAvailableApps()`）
 - **主殼頁面模板**：`common/header.php`、`common/footer.php`，僅套用於 `pages/` 下的頁面
 - **新增工具範本**：`templates/app-template/`、`templates/create-app.ps1`
 - **分類與封存**：`config.php` 的 `tags`（標籤陣列）與 `status`（`active` 或 `archived`）為選填欄位，由 `pages/home.php` 讀取後分別渲染成標籤 chip 與「封存工具」區塊，`getAvailableApps()` 本身不做任何處理
 
 ### 各子專案現況
 
-- **gradcheck**（GradCheck，v1.0.0）- 透過學號查詢亞洲大學學生畢業資格審查表；Tocas UI 5.7.0；標籤：學務、下載；已封存；MIT License
-- **kobeu**（KoBeo，v1.7.1）- 亞洲大學學生課表下載工具，需校內 VPN，提供 PDF / Excel 格式；Tocas UI 5.7.0；標籤：學務、下載、VPN；已封存；MIT License
-- **pitrace**（拾印，v0.1.1）- 手繪／掃描素材去背、校正、透明化並個別輸出的圖形化工具；Tocas UI 5.7.0；標籤：圖像、去背；MIT License
+- **gradcheck**（GradCheck，v1.0.0）- 透過學號查詢亞洲大學學生畢業資格審查表；Tocas UI 5.7.0；標籤：教務、下載；已封存；MIT License
+- **kobeu**（KoBeo，v1.7.1）- 亞洲大學學生課表下載工具，需校內 VPN，提供 PDF / Excel 格式；Tocas UI 5.7.0；標籤：教務、下載、VPN；已封存；MIT License
+- **pitrace**（拾印，v0.1.2）- 手繪／掃描素材去背、校正、透明化並個別輸出的圖形化工具，支援 PDF 匯入；Tocas UI 5.7.0；標籤：圖像、去背；MIT License
 - **hapbun**（合本，v1.0.4）- PDF 合併排版工具，可設定多頁、封面、目錄、頁碼；Tocas UI 5.7.0；標籤：PDF、排版；MIT License
+- **printan**（單仔，v0.2.7）- 熱感紙收據／標籤設計與預覽工具，所見即所印，支援 Mail Merge 批次輸出；Tocas UI 5.7.0；標籤：列印、工具；MIT License（內含 LGPL-3.0 的 libheif-js 與 SIL OFL 的 Sarasa Mono TC，見其 LICENSE）
 
 ### 與其他開發者協作
 
@@ -139,7 +141,7 @@ switch ($_APP['action']) {
 3. **測試工具** - 確保新工具在獨立環境下正常運作（子專案頁面不依賴主殼的 header/footer）
 4. **更新文件** - 如有架構變更，請同步更新此說明
 
-### 技術棧
+### 使用技術
 
 - **後端**：PHP 7.4+
 - **前端**：Tocas UI（各子專案目前的慣例，非強制）＋ 原生 JavaScript
@@ -156,6 +158,7 @@ switch ($_APP['action']) {
 ## 授權
 
 - 根目錄（KoiLiSu 主殼）：MIT License，詳見 [LICENSE](../LICENSE)
-- `apps/` 下每個子專案皆為獨立 repo，目前皆採用 MIT License：gradcheck、kobeu、pitrace、hapbun
+- `apps/` 下每個子專案皆為獨立 repo，目前皆採用 MIT License：gradcheck、kobeu、pitrace、hapbun、printan
+- 子專案用到的第三方元件（CDN 載入或隨 repo 散布）各自列在該子專案 LICENSE 的「第三方元件」段落
 
 各子專案授權可能各自異動，實際內容請以該子專案自己的 LICENSE 檔案為準。

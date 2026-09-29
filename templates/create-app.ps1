@@ -37,7 +37,7 @@ if (Test-Path $appPath) {
 Write-Host "📁 複製應用範本..." -ForegroundColor Blue
 Copy-Item -Path "templates/app-template" -Destination $appPath -Recurse
 
-# 替換變數的函數
+# 替換變數的函式
 function Replace-Variables {
     param($FilePath, $Replacements)
 
@@ -81,5 +81,5 @@ Write-Host "   /koilisu/?app=$AppName" -ForegroundColor White
 Write-Host ""
 Write-Host "📝 下一步：" -ForegroundColor Yellow
 Write-Host "   1. 編輯 $appPath/view.php 實作核心邏輯" -ForegroundColor White
-Write-Host "   2. 修改 validateInput() 和 executeMainFunction() 函數" -ForegroundColor White
+Write-Host "   2. 修改 validateInput() 和 executeMainFunction() 函式" -ForegroundColor White
 Write-Host "   3. 測試應用功能" -ForegroundColor White

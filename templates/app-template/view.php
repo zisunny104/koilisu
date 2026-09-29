@@ -43,13 +43,13 @@
     }
     </style>
     <script id="clientEventHandlersJS" language="javascript" type="text/javascript">
-    // 驗證函數範例
+    // 驗證函式範例
     function validateInput(input) {
         // TODO: 根據應用需求實作驗證邏輯
         return input && input.trim().length > 0;
     }
 
-    // 主要功能函數
+    // 主要功能函式
     function executeMainFunction(input) {
         if (!validateInput(input)) {
             alert("請輸入有效的資料");
