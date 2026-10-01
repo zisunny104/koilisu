@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// 載入共用函數
+// 載入共用函式
 require_once __DIR__ . '/common/functions.php';
 
 // 取得目前 URI，去除 "/koilisu/" 前綴
@@ -20,7 +20,7 @@ if ($app_param) {
     switch ($request_uri) {
         case '':
         case 'index':
-            // 主頁 - 顯示所有可用工具和說明文件
+            // 首頁 - 顯示所有可用工具和說明文件
             loadPage('home');
             break;
 

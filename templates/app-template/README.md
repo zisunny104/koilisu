@@ -8,7 +8,7 @@
 app-template/
 ├── config.php      # 應用設定檔
 ├── index.php       # 主入口檔案
-├── view.php        # 主視圖範本
+├── view.php        # 主檢視範本
 └── README.md       # 說明文件
 ```
 
@@ -28,9 +28,9 @@ cp -r templates/app-template apps/你的應用名稱
 | `{APP_NAME}` | 應用資料夾名稱 | `gradcheck` |
 | `{APP_DISPLAY_NAME}` | 應用顯示名稱 | `學生畢業資格審查表` |
 | `{APP_DESCRIPTION}` | 應用描述 | `亞洲大學學生畢業資格審查表下載工具` |
-| `{ICON_NAME}` | 主要圖標名稱 | `graduation-cap` |
+| `{ICON_NAME}` | 主要圖示名稱 | `graduation-cap` |
 | `{INPUT_LABEL}` | 輸入欄位標籤 | `學號` |
-| `{INPUT_ICON}` | 輸入欄位圖標 | `id-card` |
+| `{INPUT_ICON}` | 輸入欄位圖示 | `id-card` |
 | `{INPUT_PLACEHOLDER}` | 輸入欄位提示文字 | `113151000` |
 
 ### 3. 實作核心邏輯
@@ -50,7 +50,7 @@ cp -r templates/app-template apps/你的應用名稱
 ✅ **現代化 UI**：基於 Tocas UI 5.0.3
 ✅ **響應式設計**：支援各種螢幕尺寸
 ✅ **深淺色主題**：內建主題切換功能
-✅ **Sticky Footer**：現代化版面布局
+✅ **Sticky Footer**：現代化版面配置
 ✅ **動態按鈕**：支援多輸入處理
 ✅ **統一風格**：與其他 KoiLiSu 應用保持一致
 

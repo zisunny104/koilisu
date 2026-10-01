@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
     <style>
-    /* 重置瀏覽器預設，現代 sticky footer 布局 */
+    /* 重置瀏覽器預設，現代 sticky footer 版面 */
     * {
         box-sizing: border-box;
     }
@@ -197,7 +197,7 @@
     <a href="#main-content" class="skip-link">跳至主要內容</a>
     <div class="main-content">
         <?php if (!isset($hide_header) || !$hide_header): ?>
-        <!-- 導航欄 -->
+        <!-- 導覽列 -->
         <div class="ts-content is-vertically-padded koilisu-header">
             <div class="ts-container">
                 <div class="ts-grid">

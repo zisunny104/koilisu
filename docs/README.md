@@ -120,7 +120,7 @@ switch ($_APP['action']) {
 ### 共用資源
 
 - **UI 框架**：目前 5 個子專案與主殼都統一使用 Tocas UI 5.7.0。這是目前的實務慣例，路由層（`index.php` / `loadApp()`）本身不強制要求，子專案理論上可以選用其他前端方案，只要 `view.php` 能輸出完整的 HTML 頁面即可
-- **字體**：Montserrat（Google Fonts，用於主殼標題）
+- **字型**：Montserrat（Google Fonts，用於主殼標題）
 - **共用函式**：`common/functions.php`（`redirect()`、`loadPage()`、`loadApp()`、`renderMarkdown()`、`getAvailableApps()`）
 - **主殼頁面模板**：`common/header.php`、`common/footer.php`，僅套用於 `pages/` 下的頁面
 - **新增工具範本**：`templates/app-template/`、`templates/create-app.ps1`

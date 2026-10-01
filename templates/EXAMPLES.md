@@ -40,7 +40,7 @@ cp -r templates/app-template apps/myapp
 .\templates\create-app.ps1 -AppName "gradcheck" -DisplayName "學生畢業資格審查表" -Description "亞洲大學學生畢業資格審查表下載工具，需要使用校內 VPN" -IconName "graduation-cap" -InputLabel "學號" -InputIcon "id-card" -InputPlaceholder "113151000"
 ```
 
-## 常用圖標名稱
+## 常用圖示名稱
 
 - `table` - 表格
 - `graduation-cap` - 畢業帽
