@@ -27,4 +27,9 @@ for name in ['root','gradcheck','kobeu','pitrace','hapbun','printan']:
             if r.returncode:failures.append(['inline JS',r.stderr])
     results.append(dict(project=name,php=len(phps),js=len(js),inline=inline,failures=failures))
 print(json.dumps(results,ensure_ascii=False,indent=2))
-raise SystemExit(any(x['failures'] for x in results))
+failed=any(x['failures'] for x in results)
+for cmd in [[php,'tools/securitycheck.php'],['node','tools/client-security.mjs'],
+            [php,'apps/hapbun/tools/fontcheck.php'],['node','apps/printan/tools/fontcheck.mjs']]:
+    run=subprocess.run(cmd,cwd=root)
+    failed |= run.returncode != 0
+raise SystemExit(1 if failed else 0)

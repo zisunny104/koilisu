@@ -123,3 +123,11 @@ CSP 先 Report-Only 後再逐頁強制。pitrace／hapbun／printan 需要各自
 - [Ubuntu 自動安全更新](https://ubuntu.com/server/docs/how-to/software/automatic-updates/)
 - [Ubuntu OpenSSH](https://ubuntu.com/server/docs/how-to/security/openssh-server/)
 - [Ubuntu 防火牆](https://documentation.ubuntu.com/server/how-to/security/firewalls/index.html)
+
+## 字型與 ignore 補充檢核
+
+詳見 [FONT-AND-IGNORE-REVIEW-20261003.md](FONT-AND-IGNORE-REVIEW-20261003.md)。補上 hapbun 字型下載雜湊校驗、原檔保護與 OFL 隨附；Printan 匯出 `.ptan` 字型時攜帶完整授權、來源與著作權文字，修正 Sarasa 子集說明。七個儲存庫都補齊本機機密與工作目錄的 ignore，新增 tracked-files 政策檢查。
+
+子專案 draft PR：hapbun #1、[Printan #72](https://github.com/zisunny104/printan/pull/72)、[gradcheck #1](https://github.com/zisunny104/gradcheck/pull/1)、[kobeu #1](https://github.com/zisunny104/kobeu/pull/1)、[pitrace #1](https://github.com/zisunny104/pitrace/pull/1)。父儲存庫 gitlinks 指向這些審閱分支的提交；Printan 從最新 main `876b231e0c4661057881c79cae99510ddc925dc5` 開始，包含原已在 main 的 renderer baseline 修正，沒有另寫渲染功能。
+
+補充驗證：41 個 PHP、82 個 JavaScript 與 10 個頁面內 script 語法檢查通過；root PHP/JS 安全回歸、hapbun 字型原子寫入與雜湊錯誤保留原檔、Printan 字型授權匯出及 `.ptan` round-trip 都通過。另以實際 Noto 字型驗證有效快取及損壞快取行為，HTTP 安裝入口仍為 403。未執行正式部署或完整瀏覽器 PDF/USB 流程。
