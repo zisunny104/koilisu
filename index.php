@@ -11,7 +11,11 @@ $request_uri = trim(str_replace('/koilisu/', '', parse_url($_SERVER['REQUEST_URI
 $app_param = $_GET['app'] ?? null;
 
 // 路由處理
-if ($app_param) {
+if ($app_param !== null) {
+    if (!is_string($app_param) || !preg_match('/^[a-z0-9_-]{1,40}\z/', $app_param) || !is_dir(__DIR__ . "/apps/$app_param")) {
+        http_response_code(404);
+        exit;
+    }
     // 自動導向路徑方式
     header("Location: /koilisu/{$app_param}");
     exit;
