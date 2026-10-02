@@ -21,6 +21,10 @@ function redirect($url, $permanent = false)
  */
 function loadPage($page_name)
 {
+    if (!is_string($page_name) || !preg_match('/^[a-z0-9_-]{1,40}\z/', $page_name)) {
+        http_response_code(404);
+        return;
+    }
     $page_file = __DIR__ . "/../pages/$page_name.php";
 
     if (file_exists($page_file)) {
@@ -38,6 +42,11 @@ function loadPage($page_name)
  */
 function loadApp($app_name, $action = 'index')
 {
+    if (!is_string($app_name) || !preg_match('/^[a-z0-9_-]{1,40}\z/', $app_name)
+        || !is_string($action) || !preg_match('/^[a-z0-9_-]{1,40}\z/', $action)) {
+        http_response_code(404);
+        return;
+    }
     $app_dir = __DIR__ . "/../apps/$app_name";
     $app_file = "$app_dir/index.php";
 
@@ -65,7 +74,12 @@ function renderMarkdownInline($text)
     $text = preg_replace('/\*\*(.*?)\*\*/', '<strong>$1</strong>', $text);
     $text = preg_replace('/(?<!\*)\*([^*]+)\*(?!\*)/', '<em>$1</em>', $text);
     $text = preg_replace('/`([^`]+?)`/', '<code>$1</code>', $text);
-    $text = preg_replace('/\[([^\]]+)\]\(([^)]+)\)/', '<a href="$2">$1</a>', $text);
+    $text = preg_replace_callback('/\[([^\]]+)\]\(([^)]+)\)/', function ($m) {
+        $url = html_entity_decode($m[2], ENT_QUOTES, 'UTF-8');
+        $safe = preg_match('~^https?://[^\s/?#]+(?:[/?#][^\s]*)?\z~i', $url)
+            || (preg_match('~^[a-z0-9_./#?=&%+-]+\z~i', $url) && !str_starts_with($url, '//'));
+        return $safe ? '<a href="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '">' . $m[1] . '</a>' : $m[1];
+    }, $text);
     return $text;
 }
 

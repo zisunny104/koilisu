@@ -12,45 +12,9 @@ KoiLiSu 提供各項工具的網頁入口，可直接使用：
 
 https://toka.dev/koilisu/
 
-## 本機部署
+## 維護
 
-Clone 專案並 init submodule：
-
-```bash
-git clone --recurse-submodules https://github.com/zisunny104/koilisu.git
-cd koilisu
-```
-
-或先 clone 後再 init：
-
-```bash
-git clone https://github.com/zisunny104/koilisu.git
-cd koilisu
-git submodule init
-git submodule update
-```
-
-Pull 主專案並同步 submodule 到主專案記錄的 commit：
-
-```bash
-git pull
-git submodule update --init
-```
-
-或直接把各 submodule 更新到其 remote 最新 commit：
-
-```bash
-git submodule update --remote
-```
-
-將網頁伺服器指向專案根目錄即可。
-
-### 子專案依賴
-
-各子專案的前端函式庫多由 CDN 載入，不需安裝；有伺服器端依賴的子專案附有 `deploy.sh`，在該子專案目錄執行即可 fetch、檢查 PHP 語法、fast-forward 更新，並檢查依賴：
-
-- **hapbun**：中文字型 `fonts/`（不進版本控制），缺少時 `deploy.sh` 會引導下載，也可執行 `php install_font.php`；需要 PHP 的 `allow_url_fopen` 與 `openssl`
-- **printan**：第三方檔案（libheif、Sarasa 字型）已隨 repo 散布，不需額外安裝
+本站由作者維運，各工具以獨立 repository 與 Git submodule 維護。更新時使用主專案已審閱的子專案版本；原有更新工具保留供維運使用。
 
 ## 專案結構
 
