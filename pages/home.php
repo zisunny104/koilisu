@@ -64,7 +64,7 @@ function renderAppCard($app_key, $app_config, $archived = false)
 <div class="ts-space"></div>
 <div class="ts-text is-large">
     一個關於實用小工具的開放專案，讓日常操作更加順手。<br>
-    每個工具都是獨立的小應用，可以單獨維護和使用。
+    每個工具都可以獨立維護與使用。
 </div>
 
 <div class="ts-divider is-section"></div>

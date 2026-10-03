@@ -1,6 +1,6 @@
 # KoiLiSu 範本使用範例
 
-## 快速建立新應用
+## 快速建立新工具
 
 ### 使用 PowerShell 腳本（推薦）
 
@@ -8,7 +8,7 @@
 # 切換到 koilisu 目錄
 cd koilisu
 
-# 建立新應用
+# 建立新工具
 .\templates\create-app.ps1 -AppName "myapp" -DisplayName "我的工具" -Description "這是我的第一個工具" -IconName "star" -InputLabel "資料" -InputPlaceholder "請輸入資料"
 ```
 

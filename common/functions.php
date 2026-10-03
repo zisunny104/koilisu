@@ -38,7 +38,7 @@ function loadPage($page_name)
 }
 
 /**
- * 載入應用程式
+ * 載入工具
  */
 function loadApp($app_name, $action = 'index')
 {
@@ -51,7 +51,7 @@ function loadApp($app_name, $action = 'index')
     $app_file = "$app_dir/index.php";
 
     if (file_exists($app_file)) {
-        // 設定應用程式上下文
+        // 設定工具上下文
         $_APP = [
             'name' => $app_name,
             'action' => $action,
@@ -204,7 +204,7 @@ function renderMarkdown($file_path)
 }
 
 /**
- * 取得所有可用的應用程式列表
+ * 取得所有可用的工具列表
  */
 function getAvailableApps()
 {
