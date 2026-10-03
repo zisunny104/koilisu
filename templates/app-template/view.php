@@ -87,7 +87,7 @@
     <script id="clientEventHandlersJS" language="javascript" type="text/javascript">
     // 驗證函式範例
     function validateInput(input) {
-        // TODO: 根據應用需求實作驗證邏輯
+        // TODO: 根據工具需求實作驗證邏輯
         return input && input.trim().length > 0;
     }
 
@@ -169,7 +169,7 @@
         </div>
     </div>
 
-    <!-- 參考範本，僅供複製，不會被 app 直接 include／require -->
+    <!-- 參考範本，僅供複製，不會被工具直接 include／require -->
     <div id="app-footer" class="ts-content is-secondary is-vertically-padded">
         <div class="ts-container is-fluid">
             <div class="ts-grid">

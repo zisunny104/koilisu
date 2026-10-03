@@ -10,7 +10,7 @@ ck(str_contains(renderMarkdownInline('[x](https://example.org/?a=1&b=2)'), 'href
 ck(str_contains(renderMarkdownInline('[x](docs/README.md)'), '<a '), '正常相對連結');
 foreach (['..', '../index', 'a/b', "a\n", [], ''] as $bad) {
     http_response_code(200); ob_start(); loadApp($bad); $out = ob_get_clean();
-    ck(http_response_code() === 404 && $out === '', '無效 app 路徑被擋');
+    ck(http_response_code() === 404 && $out === '', '無效工具路徑被擋');
     http_response_code(200); loadPage($bad);
     ck(http_response_code() === 404, '無效 page 路徑被擋');
 }
