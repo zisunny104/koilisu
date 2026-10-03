@@ -1,0 +1,255 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")"
+
+# 有顏色的終端機才上色，避免 log 檔案裡混進一堆 ANSI 逃脫碼
+if [ -t 1 ]; then
+  BOLD=$'\033[1m'; DIM=$'\033[2m'
+  RED=$'\033[31m'; GREEN=$'\033[32m'; YELLOW=$'\033[33m'; CYAN=$'\033[36m'
+  RESET=$'\033[0m'
+else
+  BOLD=''; DIM=''; RED=''; GREEN=''; YELLOW=''; CYAN=''; RESET=''
+fi
+
+step() { echo "${BOLD}${CYAN}==>${RESET} ${BOLD}$1${RESET}"; }
+ok()   { echo "  ${GREEN}✓${RESET} $1"; }
+warn() { echo "  ${YELLOW}!${RESET} $1"; }
+fail() { echo "  ${RED}✗${RESET} $1"; }
+
+# ── 網站自我檢查：部署後執行，也可單獨跑 ./deploy.sh --check-only ──────────────────
+# 伺服器是 git pull 原地更新，Nginx 沒擋 .git/ 就能被下載整份原始碼與歷史。
+# 檢查網址優先序：環境變數 DEPLOY_CHECK_URL，其次 .deploy_check_url，後者用 --set-check-url 寫入。
+CRIT=0
+CHECK_URL_FILE=".deploy_check_url"
+EXAMPLE_URL="https://example.com/project"
+
+# 向 $1 發 GET，不跟隨轉址，8 秒逾時。
+# 輸出 exposed 代表 200 且內容以 ref: 開頭，unreach 代表連不上，其他輸出 HTTP 狀態碼。
+probe_git_head() {
+  local tmp code
+  tmp="$(mktemp)"
+  code="$(curl -sS --max-time 8 --max-redirs 0 -o "$tmp" -w '%{http_code}' "$1" 2>/dev/null)" || code="000"
+  if [ "$code" = "000" ]; then echo "unreach"
+  elif [ "$code" = "200" ] && head -c 4 "$tmp" 2>/dev/null | grep -q '^ref:'; then echo "exposed"
+  else echo "$code"; fi
+  rm -f "$tmp"
+}
+
+NGINX_SNIPPET='    location ~ /\.git { deny all; return 404; }'
+
+# 讀檢查網址：環境變數優先，其次檔案；都沒有就輸出空字串
+read_check_url() {
+  local u="${DEPLOY_CHECK_URL:-}"
+  if [ -z "$u" ] && [ -f "$CHECK_URL_FILE" ]; then
+    u="$(head -n 1 "$CHECK_URL_FILE" | tr -d '\r')"
+  fi
+  printf '%s' "$u"
+}
+
+set_check_url() {
+  local u="${1:-}"
+  case "$u" in
+    https://?*|http://?*) ;;
+    *) fail "檢查網址要以 http:// 或 https:// 開頭"
+       echo "  ${DIM}例如 ./deploy.sh --set-check-url ${EXAMPLE_URL}${RESET}"
+       return 1 ;;
+  esac
+  while [ "${u%/}" != "$u" ]; do u="${u%/}"; done
+  printf '%s\n' "$u" > "$CHECK_URL_FILE"
+  ok "已儲存  ${DIM}${u}${RESET}"
+  echo "  ${DIM}之後 ./deploy.sh 會自動使用${RESET}"
+}
+
+selfcheck_web() {
+  local base url r
+  base="$(read_check_url)"
+  if [ -z "$base" ]; then
+    warn "沒設檢查網址，略過外洩檢查"
+    echo "    ${DIM}只需設一次：./deploy.sh --set-check-url ${EXAMPLE_URL}${RESET}"
+    return 0
+  fi
+  if ! command -v curl >/dev/null 2>&1; then
+    warn "找不到 curl，略過外洩檢查"
+    return 0
+  fi
+  while [ "${base%/}" != "$base" ]; do base="${base%/}"; done
+  case "$base" in
+    https://?*|http://?*) ;;
+    *) warn "檢查網址要以 http:// 或 https:// 開頭，略過外洩檢查"
+       echo "    ${DIM}${base}${RESET}"
+       return 0 ;;
+  esac
+  url="$base/.git/HEAD"
+  r="$(probe_git_head "$url")"
+  case "$r" in
+    exposed)
+      CRIT=1
+      fail "${BOLD}${RED}.git/ 可被下載${RESET}  ${DIM}回 200，${url}${RESET}"
+      echo
+      echo "  ${BOLD}${RED}整份原始碼與提交歷史都能被任何人取得${RESET}"
+      echo "  ${BOLD}修法${RESET}：貼進 nginx 的 server 區塊，再 reload"
+      echo "${CYAN}${NGINX_SNIPPET}${RESET}"
+      echo "  ${DIM}完成後執行 ./deploy.sh --check-only 重測${RESET}" ;;
+    unreach)
+      warn ".git/ 連不上，略過" ;;
+    200)
+      warn ".git/ 回 200 但不是 git 內容"
+      echo "    ${DIM}請確認檢查網址指向本站${RESET}" ;;
+    3??)
+      warn ".git/ 回 ${r} 轉址，不跟隨"
+      echo "    ${DIM}請改用最終網址${RESET}" ;;
+    *)
+      ok ".git/ 已擋住  ${DIM}回 ${r}${RESET}" ;;
+  esac
+}
+
+run_selfcheck() {
+  step "網站自我檢查"
+  selfcheck_web
+}
+
+CHECK_ONLY=0
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --check-only) CHECK_ONLY=1 ;;
+    --set-check-url)
+      set_check_url "${2:-}" || exit 2
+      exit 0 ;;
+    -h|--help)
+      echo "用法：./deploy.sh [--check-only] [--set-check-url URL]"
+      echo "  --check-only          不更新程式碼，只跑網站自我檢查"
+      echo "  --set-check-url URL   儲存檢查網址，例如 ${EXAMPLE_URL}"
+      echo "環境變數：DEPLOY_BRANCH、DEPLOY_RELOAD_CMD、DEPLOY_CHECK_URL"
+      exit 0 ;;
+    *) fail "未知參數：$1"; exit 2 ;;
+  esac
+  shift
+done
+
+if [ "$CHECK_ONLY" -eq 1 ]; then
+  run_selfcheck
+  [ "$CRIT" -eq 0 ]
+  exit $?
+fi
+
+BRANCH="${DEPLOY_BRANCH:-main}"
+
+# 各工具是 git submodule：伺服器只能停在主專案記錄的版本，不要在工具目錄內另外 git pull 或執行它們自己的 deploy.sh。
+
+step "檢查 working tree"
+# 伺服器上的檔案被手動改過時，fast-forward 會中途失敗；先擋下來，講清楚是哪些檔案。
+DIRTY="$(git status --porcelain --untracked-files=no)"
+if [ -n "$DIRTY" ]; then
+  fail "有尚未 commit 的修改，部署已中止"
+  sed 's/^/    /' <<< "$DIRTY"
+  echo "  ${DIM}確認不需要之後，用 git checkout -- <檔案> 還原，再重新執行 ./deploy.sh${RESET}"
+  exit 1
+fi
+ok "沒有未 commit 的修改"
+
+HAS_PHP=0
+if command -v php >/dev/null 2>&1; then
+  HAS_PHP=1
+  ok "PHP CLI：$(php -r 'echo PHP_VERSION;')"
+else
+  warn "找不到 php 指令，略過語法檢查"
+  echo "    ${DIM}有語法錯誤的 PHP 檔不會在部署前被擋下${RESET}"
+fi
+
+echo
+step "Fetch 最新程式碼"
+BEFORE=$(git rev-parse --short HEAD)
+git fetch --quiet origin "$BRANCH"
+AFTER=$(git rev-parse --short FETCH_HEAD)
+ok "remote ${BRANCH}：${AFTER}"
+
+if [ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ] && ! git merge-base --is-ancestor HEAD FETCH_HEAD; then
+  fail "local ${BEFORE} 不是 remote ${AFTER} 的祖先，無法 fast-forward，部署已中止"
+  echo "  ${DIM}伺服器上不該有 remote 沒有的 commit，請用 git log ${AFTER}..HEAD 確認${RESET}"
+  exit 1
+fi
+
+if [ "$BEFORE" = "$AFTER" ]; then
+  echo
+  warn "已經是最新版本  ${DIM}${AFTER}${RESET}"
+else
+  echo
+  step "部署前檢查 PHP 語法"
+  # 在 merge 之前就用 git show 檢查 remote 版本，有錯就中止，線上檔案完全沒動
+  if [ "$HAS_PHP" -eq 1 ]; then
+    BAD=()
+    COUNT=0
+    while IFS= read -r file; do
+      [ -n "$file" ] || continue
+      COUNT=$((COUNT + 1))
+      git show "FETCH_HEAD:${file}" | php -l >/dev/null 2>&1 || BAD+=("$file")
+    done < <(git diff --name-only --diff-filter=AM HEAD FETCH_HEAD -- '*.php')
+    if [ ${#BAD[@]} -gt 0 ]; then
+      for file in "${BAD[@]}"; do
+        fail "$file  ${DIM}語法錯誤${RESET}"
+        git show "FETCH_HEAD:${file}" | php -l 2>&1 | sed -n '1p' | sed 's/^/      /' || true
+      done
+      echo
+      fail "${#BAD[@]} 個 PHP 檔有語法錯誤，部署已中止，線上檔案沒有變動"
+      exit 1
+    fi
+    ok "主專案 ${COUNT} 個 PHP 檔語法正確"
+  else
+    warn "略過，沒有 php 指令"
+  fi
+
+  echo
+  step "更新主專案"
+  git merge --ff-only --quiet FETCH_HEAD
+  ok "${DIM}${BEFORE}${RESET} → ${GREEN}${BOLD}${AFTER}${RESET}"
+  git log --oneline "${BEFORE}..${AFTER}" | sed 's/^/    /'
+fi
+
+# 子模組一律對齊到主專案記錄的版本，也補上新加入的工具
+echo
+step "更新各工具"
+SUB_BEFORE="$(git submodule status | awk '{print substr($1,2,7), $2}')"
+git submodule sync --quiet --recursive
+if ! git submodule update --init --recursive --quiet; then
+  fail "子模組更新失敗，請檢查網路與各工具 repo 的存取權限"
+  exit 1
+fi
+SUB_AFTER="$(git submodule status | awk '{print substr($1,2,7), $2}')"
+MOVED=0
+while read -r sha path; do
+  [ -n "$path" ] || continue
+  old="$(awk -v p="$path" '$2==p {print $1}' <<< "$SUB_BEFORE")"
+  if [ "$old" != "$sha" ]; then
+    MOVED=$((MOVED + 1))
+    ok "${path}  ${DIM}${old:-新增}${RESET} → ${GREEN}${sha}${RESET}"
+    if [ "$HAS_PHP" -eq 1 ] && [ -n "$old" ]; then
+      while IFS= read -r f; do
+        [ -n "$f" ] || continue
+        php -l "$path/$f" >/dev/null 2>&1 || warn "$path/$f  ${RED}語法錯誤${RESET}"
+      done < <(git -C "$path" diff --name-only --diff-filter=AM "$old" "$sha" -- '*.php' 2>/dev/null)
+    fi
+  fi
+done <<< "$SUB_AFTER"
+[ "$MOVED" -gt 0 ] || ok "各工具已是記錄的版本"
+
+# 選用：opcache 不檢查檔案時間戳的伺服器，換了檔案要重載 PHP-FPM，例如
+#   DEPLOY_RELOAD_CMD="systemctl reload php8.3-fpm" ./deploy.sh
+if [ -n "${DEPLOY_RELOAD_CMD:-}" ] && { [ "$BEFORE" != "$AFTER" ] || [ "$MOVED" -gt 0 ]; }; then
+  echo
+  step "重載 PHP"
+  if bash -c "$DEPLOY_RELOAD_CMD"; then
+    ok "${DEPLOY_RELOAD_CMD}"
+  else
+    fail "重載失敗  ${DIM}${DEPLOY_RELOAD_CMD}${RESET}"
+    echo "    ${DIM}程式碼已更新，請手動重載 PHP-FPM${RESET}"
+    exit 1
+  fi
+fi
+
+echo
+run_selfcheck
+echo
+step "部署完成"
+echo "  目前 commit：${BOLD}$(git rev-parse --short HEAD)${RESET}"
+echo "  完成時間：${DIM}$(date '+%Y-%m-%d %H:%M:%S')${RESET}"
+[ "$CRIT" -eq 0 ] || { echo; fail "自我驗證發現外洩，請依上面修法處理"; exit 1; }

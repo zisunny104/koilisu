@@ -38,7 +38,6 @@ tmp/
 
 # 部署相關
 deploy.php
-deploy.sh
 
 # 測試檔案
 phpunit.xml
@@ -65,3 +64,6 @@ __pycache__/
 *.p12
 *.pfx
 /secrets/
+
+# 部署腳本儲存的檢查網址
+.deploy_check_url
