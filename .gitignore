@@ -65,3 +65,6 @@ __pycache__/
 *.p12
 *.pfx
 /secrets/
+
+# 部署腳本儲存的檢查網址
+.deploy_check_url

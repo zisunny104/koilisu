@@ -34,6 +34,14 @@ koilisu/
 
 各工具以獨立 repository 維護，並透過 Git submodule 與 KoiLiSu 串接；主專案記錄的是各工具已審閱的版本。
 
+## 部署
+
+在伺服器的專案目錄執行 `./deploy.sh`：先檢查工作目錄與 PHP 語法，再 fast-forward 更新主專案，最後把各工具對齊到主專案記錄的版本。
+
+- `./deploy.sh --set-check-url https://example.com/project` 儲存網站網址，之後部署會自動檢查 `.git/` 是否能被網頁下載
+- `./deploy.sh --check-only` 只跑這項檢查
+- 各工具是 submodule，不要在工具目錄內另外 `git pull` 或執行它們自己的 `deploy.sh`
+
 ## 專案命名
 
 「開利手」取名自「開放」與「順手」的概念，希望工具能夠開放使用，也讓日常使用更加順手。
