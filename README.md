@@ -12,10 +12,6 @@ KoiLiSu 提供各項工具的網頁入口，可直接使用：
 
 https://toka.dev/koilisu/
 
-## 維護
-
-本站由作者維運，各工具以獨立 repository 與 Git submodule 維護。更新時使用主專案已審閱的子專案版本；原有更新工具保留供維運使用。
-
 ## 專案結構
 
 ```text
@@ -27,14 +23,16 @@ koilisu/
 ├── pages/            # 靜態頁面
 │   ├── home.php
 │   └── docs.php
-├── templates/        # 工具範本
+├── templates/        # 新增工具的範本與建立腳本
 │   └── app-template/
+├── docs/             # 架構說明（/koilisu/docs 顯示的內容）
+├── tools/            # 檢查腳本（tools/checkall.py 等）
 ├── apps/             # 各工具子專案（gradcheck、kobeu、pitrace、hapbun、printan）
 ├── .gitmodules       # submodule 設定
 └── index.php         # 主入口
 ```
 
-各工具以獨立 repository 維護，並透過 Git submodule 與 KoiLiSu 串接。
+各工具以獨立 repository 維護，並透過 Git submodule 與 KoiLiSu 串接；主專案記錄的是各子專案已審閱的版本。
 
 ## 專案命名
 
