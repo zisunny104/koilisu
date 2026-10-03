@@ -190,10 +190,45 @@
         white-space: nowrap;
         border: 0;
     }
+    .footer-plain-link {
+        display: inline-block;
+        min-height: 24px;
+        line-height: 24px;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    /* 顏色不可寫死，沿用 .ts-button 預設色才能跟著深淺色模式變化 */
+    .ts-button.footer-action-button {
+        --height: 24px;
+        min-width: 0;
+        padding: 0 .65em;
+        border-width: 1px;
+        font-size: .8em;
+    }
+
+    /* 小於 480px 時主題切換器改垂直堆疊 */
+    .ts-selection.theme-switcher-stacked {
+        flex-direction: column;
+        height: auto;
+        align-items: stretch;
+        gap: 0.2rem;
+        padding: 0.35rem;
+        border-radius: var(--ts-border-radius-container, 8px);
+    }
+
+    .ts-selection.theme-switcher-stacked .item .text {
+        width: 100%;
+    }
     </style>
 </head>
 
-<body class="is-rounded">
+<?php
+// 首次繪製就套用已儲存的佈景主題，避免先閃一下系統色再切換
+$saved_theme = $_COOKIE['preferred-theme'] ?? 'system';
+$theme_class = in_array($saved_theme, ['light', 'dark'], true) ? ' is-' . $saved_theme : '';
+?>
+<body class="is-rounded<?= $theme_class ?>">
     <a href="#main-content" class="skip-link">跳至主要內容</a>
     <div class="main-content">
         <?php if (!isset($hide_header) || !$hide_header): ?>
