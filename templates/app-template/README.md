@@ -14,6 +14,8 @@ app-template/
 
 ## 使用方法
 
+也可以直接用 `templates/create-app.ps1` 一次完成複製與替換（見 `templates/EXAMPLES.md`）；以下是手動步驟。
+
 ### 1. 複製範本
 ```bash
 cp -r templates/app-template apps/你的應用名稱
@@ -47,7 +49,7 @@ cp -r templates/app-template apps/你的應用名稱
 
 ## 範本特色
 
-✅ **現代化 UI**：基於 Tocas UI 5.0.3
+✅ **現代化 UI**：基於 Tocas UI 5.7.0
 ✅ **響應式設計**：支援各種螢幕尺寸
 ✅ **深淺色主題**：內建主題切換功能
 ✅ **Sticky Footer**：現代化版面配置
@@ -68,5 +70,3 @@ cp -r templates/app-template apps/你的應用名稱
 - **轉換工具**：如格式轉換器、編碼解碼器
 - **查詢工具**：如成績查詢、資料查找
 - **計算工具**：如學分計算器、GPA 計算器
-
-祝開發順利！🎉
