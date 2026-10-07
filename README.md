@@ -27,7 +27,7 @@ koilisu/
 │   └── app-template/
 ├── docs/             # 架構說明（/koilisu/docs 顯示的內容）
 ├── tools/            # 檢查腳本（tools/checkall.py 等）
-├── apps/             # 各工具（gradcheck、kobeu、pitrace、hapbun、printan）
+├── apps/             # 各工具（gradcheck、kobeu、pitrace、hapbun、printan、khaifile）
 ├── .gitmodules       # submodule 設定
 └── index.php         # 主入口
 ```

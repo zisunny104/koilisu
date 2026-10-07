@@ -13,3 +13,6 @@
 [submodule "apps/printan"]
 	path = apps/printan
 	url = https://github.com/zisunny104/printan.git
+[submodule "apps/khaifile"]
+	path = apps/khaifile
+	url = https://github.com/zisunny104/khaifile.git

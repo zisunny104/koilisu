@@ -4,7 +4,7 @@ import shutil
 php=shutil.which('php')
 if not php: raise SystemExit('需要 PHP CLI')
 results=[]
-for name in ['root','gradcheck','kobeu','pitrace','hapbun','printan']:
+for name in ['root','gradcheck','kobeu','pitrace','hapbun','printan','khaifile']:
     folder=root if name=='root' else root/'apps'/name
     files=list(folder.rglob('*')) if name!='root' else list(root.glob('*.php'))+list((root/'common').glob('*.php'))+list((root/'pages').glob('*.php'))+list((root/'templates').rglob('*.php'))+list((root/'tools').glob('*.php'))
     phps=[p for p in files if p.suffix=='.php']
