@@ -40,6 +40,7 @@ deploy_apps() {
             warn "${path#apps/}：沒有 deploy.sh，略過"
             skipped=$((skipped + 1)); continue
         fi
+        printf '%s────────────────────────────%s\n' "$DIM" "$RESET"
         printf '  %s\n' "執行 ${path}/deploy.sh"
         # 子專案使用自己的分支、網址與重載設定；不能繼承母專案的檢查網址。
         if (cd "$path" && env -u DEPLOY_CHECK_URL -u DEPLOY_BRANCH -u DEPLOY_RELOAD_CMD bash ./deploy.sh); then
