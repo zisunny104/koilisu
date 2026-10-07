@@ -32,7 +32,7 @@ koilisu/
 └── index.php         # 主入口
 ```
 
-各工具以獨立 repository 維護，並透過 Git submodule 與 KoiLiSu 串接；主專案記錄的是各工具已審閱的版本。
+各工具以獨立儲存庫維護，並透過 Git submodule 與 KoiLiSu 串接；主專案記錄的是各工具已審閱的版本。
 
 ## 部署
 
@@ -40,7 +40,14 @@ koilisu/
 
 - `./deploy.sh --set-check-url https://example.com/project` 儲存網站網址，之後部署會自動檢查 `.git/` 是否能被網頁下載
 - `./deploy.sh --check-only` 只跑這項檢查
-- 各工具是 submodule，不要在工具目錄內另外 `git pull` 或執行它們自己的 `deploy.sh`
+- 一般部署由母專案同步各子模組。若要保留其他工具的 VPS 版本，可在
+  提供 `deploy.sh` 的工具目錄內單獨部署；母專案下次同步時，仍會將工具
+  對齊到它記錄的提交版本。
+
+KhaiFile 提供 Office 文件的 ODF 與 PDF 轉換、PDF 壓縮、改名及批次下載。
+其 PHP-FPM、LibreOffice、Ghostscript、隔離工具與清理排程由 KhaiFile 的
+部署腳本設定，母專案部署不會代為執行。依賴、資源上限及隔離驗證限制
+詳見 [KhaiFile 說明](apps/khaifile/README.md)。
 
 ## 專案命名
 
