@@ -16,3 +16,6 @@
 [submodule "apps/khaifile"]
 	path = apps/khaifile
 	url = https://github.com/zisunny104/khaifile.git
+[submodule "apps/souliong"]
+	path = apps/souliong
+	url = https://github.com/zisunny104/souliong.git
