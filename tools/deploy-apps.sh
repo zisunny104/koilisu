@@ -53,7 +53,7 @@ deploy_apps() {
     printf '  成功：%s · 失敗：%s · 略過：%s\n' "$successes" "$failures" "$skipped"
     printf '  部署時間：%s\n' "$(date '+%Y-%m-%d %H:%M:%S')"
     if ! git diff --quiet --ignore-submodules=untracked -- apps; then
-        warn '子專案提交與母專案記錄不同；下次同步會對齊母專案記錄，請先更新版本記錄'
+        warn '子專案提交與母專案記錄不同；同步時保留同一歷史較新的提交；請更新母專案記錄供其他主機使用'
     fi
     [ "$failures" -eq 0 ]
 }

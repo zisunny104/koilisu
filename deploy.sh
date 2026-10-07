@@ -178,13 +178,25 @@ BRANCH="${DEPLOY_BRANCH:-main}"
 
 step "檢查本機變更"
 # 伺服器上的檔案被手動改過時，fast-forward 會中途失敗；先擋下來，講清楚是哪些檔案。
-DIRTY="$(git status --porcelain --untracked-files=no)"
+DIRTY="$(git status --porcelain --untracked-files=no --ignore-submodules=all)"
 if [ -n "$DIRTY" ]; then
-  fail "有尚未提交 的修改，部署已中止"
+  fail "有尚未提交的修改，部署已中止"
   sed 's/^/    /' <<< "$DIRTY"
   echo "  ${DIM}確認不需要之後，先保留並處理本機修改，再重新執行 ./deploy.sh${RESET}"
   exit 1
 fi
+if ! git diff --cached --quiet; then
+  fail '有已暫存但未提交的修改，部署已中止'
+  exit 1
+fi
+while IFS= read -r path; do
+  [ -e "$path/.git" ] || continue
+  if [ -n "$(git -C "$path" status --porcelain --untracked-files=no)" ]; then
+    fail "$path 有尚未提交的檔案修改，部署已中止"
+    git -C "$path" status --short
+    exit 1
+  fi
+done < <(registered_apps)
 ok "沒有未提交的修改"
 
 HAS_PHP=0
@@ -192,8 +204,7 @@ if command -v php >/dev/null 2>&1; then
   HAS_PHP=1
   ok "PHP CLI：$(php -r 'echo PHP_VERSION;')"
 else
-  warn "找不到 php 指令，略過語法檢查"
-  echo "    ${DIM}有語法錯誤的 PHP 檔不會在部署前被擋下${RESET}"
+  warn "找不到 php 指令，略過 PHP 執行環境檢查"
 fi
 
 step "取得遠端版本"
@@ -211,43 +222,36 @@ fi
 if [ "$BEFORE" = "$AFTER" ]; then
   ok "已是最新版本（${AFTER}）"
 else
-  step "檢查程式"
-  # 在 merge 之前就用 git show 檢查 remote 版本，有錯就中止，線上檔案完全沒動
-  if [ "$HAS_PHP" -eq 1 ]; then
-    BAD=()
-    COUNT=0
-    while IFS= read -r file; do
-      [ -n "$file" ] || continue
-      COUNT=$((COUNT + 1))
-      git show "FETCH_HEAD:${file}" | php -l >/dev/null 2>&1 || BAD+=("$file")
-    done < <(git diff --name-only --diff-filter=AM HEAD FETCH_HEAD -- '*.php')
-    if [ ${#BAD[@]} -gt 0 ]; then
-      for file in "${BAD[@]}"; do
-        fail "$file  ${DIM}語法錯誤${RESET}"
-        git show "FETCH_HEAD:${file}" | php -l 2>&1 | sed -n '1p' | sed 's/^/      /' || true
-      done
-      fail "${#BAD[@]} 個 PHP 檔有語法錯誤，部署已中止，線上檔案沒有變動"
-      exit 1
-    fi
-    ok "主專案 ${COUNT} 個 PHP 檔語法正確"
-  else
-    warn "略過，沒有 php 指令"
-  fi
-
   step "更新程式"
-  git merge --ff-only --quiet FETCH_HEAD
+  git -c submodule.recurse=false merge --ff-only --quiet FETCH_HEAD
   ok "${DIM}${BEFORE}${RESET} → ${GREEN}${BOLD}${AFTER}${RESET}"
   git log --oneline "${BEFORE}..${AFTER}" | sed 's/^/    /'
 fi
 
-# 子模組一律對齊到主專案記錄的版本，也補上新加入的工具
+# 子模組較舊時快轉到記錄版本，保留較新提交；分歧不重設。
 step "同步子專案"
 SUB_BEFORE="$(git submodule status | awk '{sha=$1; sub(/^[-+U]/,"",sha); print substr(sha,1,7), $2}')"
 git submodule sync --quiet --recursive
-if ! git submodule update --init --recursive --quiet; then
-  fail "子模組更新失敗，請檢查網路與各工具 repo 的存取權限"
-  exit 1
-fi
+while IFS= read -r path; do
+  target="$(git rev-parse "HEAD:$path")"
+  if [ ! -e "$path/.git" ]; then
+    git submodule update --init --recursive -- "$path" || { fail "$path 初始化失敗"; exit 1; }
+    continue
+  fi
+  current="$(git -C "$path" rev-parse HEAD)"
+  [ "$current" != "$target" ] || continue
+  if ! git -C "$path" cat-file -e "$target^{commit}" 2>/dev/null; then
+    git -C "$path" fetch --quiet origin "$target" || { fail "$path 無法取得記錄的提交"; exit 1; }
+  fi
+  if git -C "$path" merge-base --is-ancestor "$target" "$current"; then
+    warn "${path#apps/}：保留比母專案記錄更新的提交 $(git -C "$path" rev-parse --short HEAD)"
+  elif git -C "$path" merge-base --is-ancestor "$current" "$target"; then
+    git -C "$path" -c submodule.recurse=false merge --ff-only --quiet "$target" || { fail "$path 更新失敗"; exit 1; }
+  else
+    fail "$path 與母專案記錄分歧，保留目前版本並中止"
+    exit 1
+  fi
+done < <(registered_apps)
 SUB_AFTER="$(git submodule status | awk '{sha=$1; sub(/^[-+U]/,"",sha); print substr(sha,1,7), $2}')"
 MOVED=0
 while read -r sha path; do
@@ -256,12 +260,7 @@ while read -r sha path; do
   if [ "$old" != "$sha" ]; then
     MOVED=$((MOVED + 1))
     ok "${path}  ${DIM}${old:-新增}${RESET} → ${GREEN}${sha}${RESET}"
-    if [ "$HAS_PHP" -eq 1 ] && [ -n "$old" ]; then
-      while IFS= read -r f; do
-        [ -n "$f" ] || continue
-        php -l "$path/$f" >/dev/null 2>&1 || warn "$path/$f  ${RED}語法錯誤${RESET}"
-      done < <(git -C "$path" diff --name-only --diff-filter=AM "$old" "$sha" -- '*.php' 2>/dev/null)
-    fi
+
   fi
 done <<< "$SUB_AFTER"
 while IFS= read -r path; do
