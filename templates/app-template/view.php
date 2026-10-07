@@ -22,6 +22,10 @@
         min-height: 100vh;
     }
 
+    #app-footer {
+        padding-inline: 0;
+    }
+
     .main-content {
         flex: 1;
     }
@@ -171,7 +175,7 @@
 
     <!-- 參考範本，僅供複製，不會被工具直接 include／require -->
     <div id="app-footer" class="ts-content is-secondary is-vertically-padded">
-        <div class="ts-container is-fluid">
+        <div class="ts-container is-narrow">
             <div class="ts-grid">
                 <div class="column is-fluid">
                     <div class="ts-wrap is-vertical is-compact">

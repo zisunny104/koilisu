@@ -4,6 +4,7 @@ cd "$(dirname "$0")"
 
 # 與其他開利手專案共用部署輸出慣例。
 source tools/deploy-output.sh
+source tools/deploy-apps.sh
 
 # ── 網站檢查：部署後執行，也可單獨跑 ./deploy.sh --check-only ──────────────────
 # 伺服器是 git pull 原地更新，Nginx 沒擋 .git/ 就能被下載整份原始碼與歷史。
@@ -132,9 +133,14 @@ run_selfcheck() {
 }
 
 CHECK_ONLY=0
+DEPLOY_APPS=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --check-only) CHECK_ONLY=1 ;;
+    --deploy-apps)
+      [ $# -ge 2 ] && [ -n "$2" ] || { fail "請指定 all 或逗號分隔的子專案名稱"; exit 2; }
+      DEPLOY_APPS="$2"
+      shift ;;
     --set-check-url)
       set_check_url "${2:-}" || exit 2
       exit 0 ;;
@@ -146,12 +152,19 @@ while [ $# -gt 0 ]; do
       echo "  --check-only          不更新程式，只跑網站檢查"
       echo "  --set-check-url URL   儲存檢查網址，例如 ${EXAMPLE_URL}"
       echo "  --configure-nginx FILE 寫入 .git 封鎖規則並 reload Nginx（需 root）"
+      echo "  --deploy-apps all|名稱,名稱  執行全部或指定工具的 deploy.sh，不更新母專案"
       echo "環境變數：DEPLOY_BRANCH、DEPLOY_RELOAD_CMD、DEPLOY_CHECK_URL"
       exit 0 ;;
     *) fail "未知參數：$1"; exit 2 ;;
   esac
   shift
 done
+
+if [ -n "$DEPLOY_APPS" ]; then
+  [ "$CHECK_ONLY" -eq 0 ] || { fail "--deploy-apps 不可搭配 --check-only"; exit 2; }
+  deploy_apps "$DEPLOY_APPS"
+  exit $?
+fi
 
 if [ "$CHECK_ONLY" -eq 1 ]; then
   run_selfcheck
@@ -161,7 +174,7 @@ fi
 
 BRANCH="${DEPLOY_BRANCH:-main}"
 
-# 各工具是 git submodule：伺服器只能停在主專案記錄的版本，不要在工具目錄內另外 git pull 或執行它們自己的 deploy.sh。
+# 一般部署對齊母專案記錄；--deploy-apps 可另外執行工具部署，不強制重設 Git。
 
 step "檢查本機變更"
 # 伺服器上的檔案被手動改過時，fast-forward 會中途失敗；先擋下來，講清楚是哪些檔案。
@@ -229,13 +242,13 @@ fi
 
 # 子模組一律對齊到主專案記錄的版本，也補上新加入的工具
 step "同步子專案"
-SUB_BEFORE="$(git submodule status | awk '{print substr($1,2,7), $2}')"
+SUB_BEFORE="$(git submodule status | awk '{sha=$1; sub(/^[-+U]/,"",sha); print substr(sha,1,7), $2}')"
 git submodule sync --quiet --recursive
 if ! git submodule update --init --recursive --quiet; then
   fail "子模組更新失敗，請檢查網路與各工具 repo 的存取權限"
   exit 1
 fi
-SUB_AFTER="$(git submodule status | awk '{print substr($1,2,7), $2}')"
+SUB_AFTER="$(git submodule status | awk '{sha=$1; sub(/^[-+U]/,"",sha); print substr(sha,1,7), $2}')"
 MOVED=0
 while read -r sha path; do
   [ -n "$path" ] || continue
@@ -251,7 +264,9 @@ while read -r sha path; do
     fi
   fi
 done <<< "$SUB_AFTER"
-[ "$MOVED" -gt 0 ] || ok "各工具已是記錄的版本"
+while IFS= read -r path; do
+  [ -n "$path" ] && app_summary "$path"
+done < <(registered_apps)
 
 # 選用：opcache 不檢查檔案時間戳的伺服器，換了檔案要重載服務-FPM，例如
 #   DEPLOY_RELOAD_CMD="systemctl reload php8.3-fpm" ./deploy.sh
