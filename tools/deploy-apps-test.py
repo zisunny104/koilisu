@@ -27,6 +27,12 @@ printf '%s:%s:%s:%s\\n' "$PWD" "${DEPLOY_CHECK_URL-unset}" "${DEPLOY_BRANCH-unse
 exit ''' + ('9' if name == 'broken' else '0') + '\n')
         modules.append(f'[submodule "apps/{name}"]\npath = apps/{name}\nurl = example\n')
     (root / '.gitmodules').write_text(''.join(modules))
+    subprocess.run(['git','add','.gitmodules','apps'],cwd=root,check=True,stderr=subprocess.DEVNULL)
+    subprocess.run(['git','-c','user.name=Test','-c','user.email=test@example.invalid','-c','commit.gpgsign=false','commit','-qm','parent fixture'],cwd=root,check=True)
+    recorded=subprocess.check_output(['git','-C',str(root/'apps/alpha'),'rev-parse','--short','HEAD'],text=True).strip()
+    (root/'apps/alpha/change').write_text('new child commit')
+    subprocess.run(['git','-C',str(root/'apps/alpha'),'add','change'],check=True)
+    subprocess.run(['git','-C',str(root/'apps/alpha'),'-c','user.name=Test','-c','user.email=test@example.invalid','-c','commit.gpgsign=false','commit','-qm','newer child'],check=True)
     log = root / 'runs'
     env = dict(os.environ,TEST_LOG=str(log),DEPLOY_CHECK_URL='https://parent.invalid',DEPLOY_BRANCH='parent',DEPLOY_RELOAD_CMD='parent')
     def run(selection):
@@ -37,11 +43,24 @@ exit ''' + ('9' if name == 'broken' else '0') + '\n')
     lines=log.read_text().splitlines()
     assert len(lines)==2 and '/omega:unset:unset:unset' in lines[0] and '/alpha:' in lines[1]
     assert 'v1.2.3' in result.stdout and '目前提交' in result.stdout
+    assert f'alpha · 母專案記錄：{recorded}' in result.stdout and '本機較新 1 個提交' in result.stdout
+    assert 'omega · 母專案記錄' not in result.stdout
     print('PASS Selected children run in order, without duplicates or inherited parent settings')
     result=run('all')
     assert result.returncode != 0 and len(log.read_text().splitlines())==3
     assert '成功：2 · 失敗：1 · 略過：1' in result.stdout
     print('PASS All children run despite failures; missing scripts are reported as skipped')
+    child=root/'apps/alpha'
+    newer=subprocess.check_output(['git','-C',str(child),'rev-parse','HEAD'],text=True).strip()
+    subprocess.run(['git','update-index','--cacheinfo','160000',newer,'apps/alpha'],cwd=root,check=True)
+    subprocess.run(['git','-c','user.name=Test','-c','user.email=test@example.invalid','-c','commit.gpgsign=false','commit','-qm','record newer child'],cwd=root,check=True)
+    subprocess.run(['git','-C',str(child),'checkout','-q','--detach',recorded],check=True)
+    result=run('alpha');assert '本機較舊 1 個提交' in result.stdout
+    (child/'other').write_text('divergent')
+    subprocess.run(['git','-C',str(child),'add','other'],check=True)
+    subprocess.run(['git','-C',str(child),'-c','user.name=Test','-c','user.email=test@example.invalid','-c','commit.gpgsign=false','commit','-qm','divergent child'],check=True)
+    result=run('alpha');assert '歷史分歧：本機多 1 個、缺 1 個提交' in result.stdout
+    print('PASS Difference reports identify newer, older and divergent child commits')
     result=run('../outside')
     assert result.returncode == 2 and not log.read_text()
     print('PASS Unregistered paths are rejected before running any child')

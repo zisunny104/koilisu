@@ -11,6 +11,32 @@ app_summary() {
     fi
     ok "${path#apps/} · 專案版本：${version} · 目前提交：${sha}"
 }
+# 比較母專案已提交的記錄，避免把檔案修改誤報為提交差異。
+report_app_differences() {
+    local path target current counts ahead behind found=0 relation
+    while IFS= read -r path; do
+        target="$(git rev-parse "HEAD:$path" 2>/dev/null)" || continue
+        [ -e "$path/.git" ] || continue
+        current="$(git -C "$path" rev-parse HEAD)"
+        [ "$target" != "$current" ] || continue
+        if [ "$found" -eq 0 ]; then
+            warn '子專案提交與母專案記錄不同'
+            found=1
+        fi
+        relation='無法比較歷史（本機未取得母專案記錄的提交）'
+        if git -C "$path" cat-file -e "$target^{commit}" 2>/dev/null; then
+            counts="$(git -C "$path" rev-list --left-right --count "$target...$current")"
+            read -r behind ahead <<< "$counts"
+            if [ "$behind" -eq 0 ]; then relation="本機較新 ${ahead} 個提交"
+            elif [ "$ahead" -eq 0 ]; then relation="本機較舊 ${behind} 個提交"
+            else relation="歷史分歧：本機多 ${ahead} 個、缺 ${behind} 個提交"; fi
+        fi
+        printf '    %s · 母專案記錄：%.7s · 本機提交：%.7s · %s\n' "${path#apps/}" "$target" "$current" "$relation"
+    done < <(registered_apps)
+    if [ "$found" -eq 1 ]; then
+        printf '  %s\n' '請更新母專案記錄，供其他主機使用；目前提交不會被重設。'
+    fi
+}
 deploy_apps() {
     local selection="$1" path name failures=0 successes=0 skipped=0
     local -a paths=() requested=()
@@ -52,8 +78,6 @@ deploy_apps() {
     step '子專案部署結果'
     printf '  成功：%s · 失敗：%s · 略過：%s\n' "$successes" "$failures" "$skipped"
     printf '  部署時間：%s\n' "$(date '+%Y-%m-%d %H:%M:%S')"
-    if ! git diff --quiet --ignore-submodules=untracked -- apps; then
-        warn '子專案提交與母專案記錄不同；同步時保留同一歷史較新的提交；請更新母專案記錄供其他主機使用'
-    fi
+    report_app_differences
     [ "$failures" -eq 0 ]
 }

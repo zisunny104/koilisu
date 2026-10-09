@@ -267,6 +267,8 @@ while IFS= read -r path; do
   [ -n "$path" ] && app_summary "$path"
 done < <(registered_apps)
 
+report_app_differences
+
 # 選用：opcache 不檢查檔案時間戳的伺服器，換了檔案要重載服務-FPM，例如
 #   DEPLOY_RELOAD_CMD="systemctl reload php8.3-fpm" ./deploy.sh
 if [ -n "${DEPLOY_RELOAD_CMD:-}" ] && { [ "$BEFORE" != "$AFTER" ] || [ "$MOVED" -gt 0 ]; }; then
