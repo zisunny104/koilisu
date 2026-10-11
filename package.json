@@ -1,6 +1,6 @@
 {
     "name": "koilisu",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "讓生活中的小事更順手的開放專案",
     "type": "module",
     "main": "index.php",
