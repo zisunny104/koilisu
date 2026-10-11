@@ -33,9 +33,9 @@ configure_nginx_git() {
   [ "$(id -u)" = 0 ] || { fail "需要 root／sudo"; return 1; }
   [ -n "$site" ] || { fail "用法：./deploy.sh --configure-nginx <Nginx 網站設定檔>"; return 1; }
   site="$(realpath "$site" 2>/dev/null)" || { fail "找不到檔案：$1"; return 1; }
-  [ -f "$site" ] || { fail "找不到檔案：$site"; return 1; }
+  [ -f "$site" ] || { fail "找不到檔案：$1"; return 1; }
   if grep -q 'BEGIN KoiLiSu managed' "$site"; then
-    ok "已有 KoiLiSu 管理的區塊，略過  ${DIM}${site}${RESET}"
+    ok "已有 KoiLiSu 管理的區塊，略過"
     return 0
   fi
   count="$(grep -cE '^[[:space:]]*server[[:space:]]*\{[[:space:]]*$' "$site" || true)"
@@ -177,7 +177,7 @@ BRANCH="${DEPLOY_BRANCH:-main}"
 # 一般部署對齊母專案記錄；--deploy-apps 可另外執行工具部署，不強制重設 Git。
 
 step "檢查本機變更"
-# 伺服器上的檔案被手動改過時，fast-forward 會中途失敗；先擋下來，講清楚是哪些檔案。
+# 手動改過的檔案會讓快轉失敗，先列出並中止。
 DIRTY="$(git status --porcelain --untracked-files=no --ignore-submodules=all)"
 if [ -n "$DIRTY" ]; then
   fail "有尚未提交的修改，部署已中止"
@@ -269,7 +269,7 @@ done < <(registered_apps)
 
 report_app_differences
 
-# 選用：opcache 不檢查檔案時間戳的伺服器，換了檔案要重載服務-FPM，例如
+# 選用：opcache 不檢查檔案時間戳時，更新後需重載 PHP-FPM，例如
 #   DEPLOY_RELOAD_CMD="systemctl reload php8.3-fpm" ./deploy.sh
 if [ -n "${DEPLOY_RELOAD_CMD:-}" ] && { [ "$BEFORE" != "$AFTER" ] || [ "$MOVED" -gt 0 ]; }; then
   step "重載服務"
@@ -277,7 +277,7 @@ if [ -n "${DEPLOY_RELOAD_CMD:-}" ] && { [ "$BEFORE" != "$AFTER" ] || [ "$MOVED" 
     ok "${DEPLOY_RELOAD_CMD}"
   else
     fail "重載失敗  ${DIM}${DEPLOY_RELOAD_CMD}${RESET}"
-    echo "    ${DIM}程式碼已更新，請手動重載服務-FPM${RESET}"
+    echo "    ${DIM}程式碼已更新，請手動重載 PHP-FPM${RESET}"
     exit 1
   fi
 fi

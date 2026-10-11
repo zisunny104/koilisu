@@ -11,7 +11,7 @@ app_summary() {
     fi
     ok "${path#apps/} · 專案版本：${version} · 目前提交：${sha}"
 }
-# 比較母專案已提交的記錄，避免把檔案修改誤報為提交差異。
+# 比較母專案已提交的記錄與子專案目前提交。
 report_app_differences() {
     local path target current counts ahead behind found=0 relation
     while IFS= read -r path; do
