@@ -5,8 +5,13 @@
     <meta charset="UTF-8">
     <title>{APP_DISPLAY_NAME} - KoiLiSu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/5.7.0/tocas.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/5.7.0/tocas.min.js"></script>
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/5.7.0/tocas.min.css"
+        integrity="sha512-F4xj0Qcc6/jwQjpN70mZP1F5edUVg/WbWEYqUu1FEnvZFAg5IxvBAlNgji+6547uhPtaO14HmBdMhsZ19fHVSw=="
+        crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/5.7.0/tocas.min.js"
+        integrity="sha512-nzuAF7sDvUg8SagRIjY6B5mXfwuMW/3fOU/LITsIukL7PVzfN1srR+2GSfqYr53gRkq8B2y0Sb7Z66ZRMmtxdg=="
+        crossorigin="anonymous"></script>
 
     <style type="text/css">
     /* 現代 sticky footer 版面 */
@@ -177,7 +182,7 @@
                     <div class="ts-wrap is-vertical is-compact">
                         <div class="ts-text is-description">
                             <a href="/koilisu/" class="footer-plain-link">KoiLiSu 開利手</a> -
-                            讓工具使用更順手的開放專案 | <a href="https://toka.dev" target="_blank" rel="noopener" class="footer-plain-link">prjToka</a>
+                            讓工具使用更順手的開放專案 | <a href="https://toka.dev" target="_blank" rel="noopener noreferrer" class="footer-plain-link">prjToka</a>
                         </div>
                         <div class="ts-wrap is-middle-aligned is-compact">
                             <!-- License 按鈕不內建 modal，請自行實作點擊後顯示授權內容 -->

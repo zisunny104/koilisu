@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(['cookie_httponly' => true, 'cookie_samesite' => 'Lax', 'cookie_secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off']);
 
 // 載入共用函式
 require_once __DIR__ . '/common/functions.php';
