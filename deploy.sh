@@ -110,7 +110,7 @@ selfcheck_web() {
     exposed)
       CRIT=1
       fail "${BOLD}${RED}.git/ 可被下載${RESET}  ${DIM}回 200，${url}${RESET}"
-      echo "  ${BOLD}${RED}整份原始碼與提交歷史都能被任何人取得${RESET}"
+      echo "  ${BOLD}${RED}整份原始碼與 commit 歷史都能被任何人取得${RESET}"
       echo "  ${BOLD}修法${RESET}：貼進 nginx 的 server 區塊再 reload，或用 sudo ./deploy.sh --configure-nginx <設定檔> 自動處理"
       echo "${CYAN}${NGINX_SNIPPET}${RESET}"
       echo "  ${DIM}完成後執行 ./deploy.sh --check-only 重測${RESET}" ;;
@@ -177,27 +177,27 @@ BRANCH="${DEPLOY_BRANCH:-main}"
 # 一般部署對齊母專案記錄；--deploy-apps 可另外執行工具部署，不強制重設 Git。
 
 step "檢查本機變更"
-# 手動改過的檔案會讓快轉失敗，先列出並中止。
+# 手動改過的檔案會讓 fast-forward 失敗，先列出並中止。
 DIRTY="$(git status --porcelain --untracked-files=no --ignore-submodules=all)"
 if [ -n "$DIRTY" ]; then
-  fail "有尚未提交的修改，部署已中止"
+  fail "有尚未 commit 的修改，部署已中止"
   sed 's/^/    /' <<< "$DIRTY"
   echo "  ${DIM}確認不需要之後，先保留並處理本機修改，再重新執行 ./deploy.sh${RESET}"
   exit 1
 fi
 if ! git diff --cached --quiet; then
-  fail '有已暫存但未提交的修改，部署已中止'
+  fail '有已 stage 但未 commit 的修改，部署已中止'
   exit 1
 fi
 while IFS= read -r path; do
   [ -e "$path/.git" ] || continue
   if [ -n "$(git -C "$path" status --porcelain --untracked-files=no)" ]; then
-    fail "$path 有尚未提交的檔案修改，部署已中止"
+    fail "$path 有尚未 commit 的檔案修改，部署已中止"
     git -C "$path" status --short
     exit 1
   fi
 done < <(registered_apps)
-ok "沒有未提交的修改"
+ok "沒有未 commit 的修改"
 
 HAS_PHP=0
 if command -v php >/dev/null 2>&1; then
@@ -207,15 +207,15 @@ else
   warn "找不到 php 指令，略過 PHP 執行環境檢查"
 fi
 
-step "取得遠端版本"
+step "取得 remote 版本"
 BEFORE=$(git rev-parse --short HEAD)
 git fetch --quiet origin "$BRANCH"
 AFTER=$(git rev-parse --short FETCH_HEAD)
-ok "遠端分支 ${BRANCH}：${AFTER}"
+ok "remote branch ${BRANCH}：${AFTER}"
 
 if [ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ] && ! git merge-base --is-ancestor HEAD FETCH_HEAD; then
-  fail "本機與遠端版本已分歧，無法快轉更新，部署已中止"
-  echo "  ${DIM}請先保留並確認本機提交：git log ${AFTER}..HEAD${RESET}"
+  fail "本機與 remote 版本已 diverge，無法 fast-forward 更新，部署已中止"
+  echo "  ${DIM}請先保留並確認本機 commit：git log ${AFTER}..HEAD${RESET}"
   exit 1
 fi
 
@@ -228,7 +228,7 @@ else
   git log --oneline "${BEFORE}..${AFTER}" | sed 's/^/    /'
 fi
 
-# 子模組較舊時快轉到記錄版本，保留較新提交；分歧不重設。
+# submodule 較舊時 fast-forward 到記錄版本，保留較新 commit；diverge 不重設。
 step "同步子專案"
 SUB_BEFORE="$(git submodule status | awk '{sha=$1; sub(/^[-+U]/,"",sha); print substr(sha,1,7), $2}')"
 git submodule sync --quiet --recursive
@@ -241,14 +241,14 @@ while IFS= read -r path; do
   current="$(git -C "$path" rev-parse HEAD)"
   [ "$current" != "$target" ] || continue
   if ! git -C "$path" cat-file -e "$target^{commit}" 2>/dev/null; then
-    git -C "$path" fetch --quiet origin "$target" || { fail "$path 無法取得記錄的提交"; exit 1; }
+    git -C "$path" fetch --quiet origin "$target" || { fail "$path 無法取得記錄的 commit"; exit 1; }
   fi
   if git -C "$path" merge-base --is-ancestor "$target" "$current"; then
-    warn "${path#apps/}：保留比母專案記錄更新的提交 $(git -C "$path" rev-parse --short HEAD)"
+    warn "${path#apps/}：保留比母專案記錄更新的 commit $(git -C "$path" rev-parse --short HEAD)"
   elif git -C "$path" merge-base --is-ancestor "$current" "$target"; then
     git -C "$path" -c submodule.recurse=false merge --ff-only --quiet "$target" || { fail "$path 更新失敗"; exit 1; }
   else
-    fail "$path 與母專案記錄分歧，保留目前版本並中止"
+    fail "$path 與母專案記錄 diverge，保留目前版本並中止"
     exit 1
   fi
 done < <(registered_apps)

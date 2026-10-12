@@ -42,8 +42,8 @@ exit ''' + ('9' if name == 'broken' else '0') + '\n')
     assert result.returncode == 0, result.stdout+result.stderr
     lines=log.read_text().splitlines()
     assert len(lines)==2 and '/omega:unset:unset:unset' in lines[0] and '/alpha:' in lines[1]
-    assert 'v1.2.3' in result.stdout and '目前提交' in result.stdout
-    assert f'alpha · 母專案記錄：{recorded}' in result.stdout and '本機較新 1 個提交' in result.stdout
+    assert 'v1.2.3' in result.stdout and '目前 commit' in result.stdout
+    assert f'alpha · 母專案記錄：{recorded}' in result.stdout and '本機較新 1 個 commit' in result.stdout
     assert 'omega · 母專案記錄' not in result.stdout
     print('PASS Selected children run in order, without duplicates or inherited parent settings')
     result=run('all')
@@ -55,11 +55,11 @@ exit ''' + ('9' if name == 'broken' else '0') + '\n')
     subprocess.run(['git','update-index','--cacheinfo','160000',newer,'apps/alpha'],cwd=root,check=True)
     subprocess.run(['git','-c','user.name=Test','-c','user.email=test@example.invalid','-c','commit.gpgsign=false','commit','-qm','record newer child'],cwd=root,check=True)
     subprocess.run(['git','-C',str(child),'checkout','-q','--detach',recorded],check=True)
-    result=run('alpha');assert '本機較舊 1 個提交' in result.stdout
+    result=run('alpha');assert '本機較舊 1 個 commit' in result.stdout
     (child/'other').write_text('divergent')
     subprocess.run(['git','-C',str(child),'add','other'],check=True)
     subprocess.run(['git','-C',str(child),'-c','user.name=Test','-c','user.email=test@example.invalid','-c','commit.gpgsign=false','commit','-qm','divergent child'],check=True)
-    result=run('alpha');assert '歷史分歧：本機多 1 個、缺 1 個提交' in result.stdout
+    result=run('alpha');assert '歷史 diverge：本機多 1 個、缺 1 個 commit' in result.stdout
     print('PASS Difference reports identify newer, older and divergent child commits')
     result=run('../outside')
     assert result.returncode == 2 and not log.read_text()

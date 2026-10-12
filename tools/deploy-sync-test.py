@@ -46,5 +46,5 @@ with tempfile.TemporaryDirectory(prefix='koilisu-sync-') as temp:
     git(app,'config','user.name','Test');git(app,'config','user.email','test@example.invalid');git(app,'config','commit.gpgsign','false')
     git(app,'checkout','--detach',old);(app/'divergent.txt').write_text('keep');git(app,'add','.');git(app,'commit','-qm','diverged')
     diverged=git(app,'rev-parse','HEAD');r=deploy()
-    assert r.returncode!=0 and git(app,'rev-parse','HEAD')==diverged and '分歧' in r.stdout
+    assert r.returncode!=0 and git(app,'rev-parse','HEAD')==diverged and 'diverge' in r.stdout
     print('PASS Divergent child is preserved and deployment stops')

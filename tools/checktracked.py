@@ -1,4 +1,4 @@
-"""檢核 root 與已初始化子模組的追蹤檔案，僅輸出路徑，不輸出秘密值。"""
+"""檢核 root 與已初始化 submodule 的追蹤檔案，僅輸出路徑，不輸出秘密值。"""
 import pathlib, subprocess, re, json
 root = pathlib.Path(__file__).resolve().parents[1]
 children = subprocess.check_output(['git','config','--file',str(root/'.gitmodules'),'--get-regexp','path'],text=True).splitlines()
