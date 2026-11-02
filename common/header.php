@@ -213,17 +213,19 @@
     }
 
     /* 小於 480px 時主題切換器改垂直堆疊 */
-    .ts-selection.theme-switcher-stacked {
-        flex-direction: column;
-        height: auto;
-        align-items: stretch;
-        gap: 0.2rem;
-        padding: 0.35rem;
-        border-radius: var(--ts-border-radius-container, 8px);
-    }
+    @media (max-width: 480px) {
+        .ts-selection.theme-switcher-stacked {
+            flex-direction: column;
+            height: auto;
+            align-items: stretch;
+            gap: 0.2rem;
+            padding: 0.35rem;
+            border-radius: var(--ts-border-radius-container, 8px);
+        }
 
-    .ts-selection.theme-switcher-stacked .item .text {
-        width: 100%;
+        .ts-selection.theme-switcher-stacked .item .text {
+            width: 100%;
+        }
     }
     </style>
 </head>
